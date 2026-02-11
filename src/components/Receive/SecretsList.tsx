@@ -137,7 +137,7 @@ export const SecretsList: React.FC<SecretsListProps> = ({
 
           <Grid container spacing={3}>
             {filteredSecrets.map((secret) => (
-              <Grid key={secret.reference} size={{ xs: 12, sm: 12, md: 6 }}>
+              <Grid key={secret.reference} size={{ xs: 12, sm: 6, md: 6 }}>
                 <SecretCard
                   secret={secret}
                   onDownload={onDownload}

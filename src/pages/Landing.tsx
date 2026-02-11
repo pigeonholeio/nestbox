@@ -22,7 +22,6 @@ export const Landing: React.FC = () => {
   const { isAuthenticated } = useAuth0();
   const navigate = useNavigate();
 
-  // Redirect if already authenticated
   React.useEffect(() => {
     if (isAuthenticated) {
       navigate('/send');
@@ -57,21 +56,21 @@ export const Landing: React.FC = () => {
   ];
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      {/* Header - Full Width */}
-      <Box sx={{ width: '100%', bgcolor: 'background.paper', borderBottom: '1px solid', borderColor: 'divider' }}>
-        <Box sx={{ py: 2, px: { xs: 2, sm: 3 }, maxWidth: 1200, mx: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Box sx={{ width: '100vw', minHeight: '100vh', display: 'flex', flexDirection: 'column', overflowX: 'hidden' }}>
+      {/* Navigation Bar */}
+      <Box sx={{ width: '100%', bgcolor: 'background.paper', borderBottom: '1px solid', borderColor: 'divider', position: 'sticky', top: 0, zIndex: 100 }}>
+        <Box sx={{ height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: { xs: 2, sm: 4, md: 6 } }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Box
               component="img"
               src="/logo.png"
-              alt="PigeonHole Logo"
-              sx={{ height: 32 }}
+              alt="PigeonHole"
+              sx={{ height: 40 }}
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
               }}
             />
-            <Typography variant="h5" component="h1" sx={{ fontWeight: 700, color: 'primary.main' }}>
+            <Typography variant="h6" sx={{ fontWeight: 700, color: 'primary.main' }}>
               PigeonHole
             </Typography>
           </Box>
@@ -79,98 +78,95 @@ export const Landing: React.FC = () => {
         </Box>
       </Box>
 
-      {/* Hero Section with Background Image - Full Width */}
+      {/* Hero */}
       <Box
         sx={{
           width: '100%',
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          bgcolor: 'background.default',
           backgroundImage: 'url(https://pigeono.io/assets/images/landing_page.png)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed',
           position: 'relative',
-          py: { xs: 8, sm: 12, md: 16 },
+          py: { xs: 6, md: 0 },
+          px: { xs: 2, sm: 4, md: 6 },
+          textAlign: 'center',
           '&::before': {
             content: '""',
             position: 'absolute',
             top: 0,
             left: 0,
-            right: 0,
-            bottom: 0,
-            bgcolor: 'rgba(255, 255, 255, 0.9)',
+            width: '100%',
+            height: '100%',
+            bgcolor: 'rgba(255, 255, 255, 0.92)',
             zIndex: 0,
           },
         }}
       >
-        <Box sx={{ position: 'relative', zIndex: 1, px: { xs: 2, sm: 3 }, maxWidth: 1200, mx: 'auto' }}>
-          <Box sx={{ textAlign: 'center' }}>
-            <Typography
-              variant="h2"
-              component="h2"
-              sx={{
-                fontWeight: 700,
-                mb: 2,
-                fontSize: { xs: '2rem', sm: '2.5rem', md: '3.5rem' },
-              }}
-            >
-              Secure Drop
-            </Typography>
-            <Typography
-              variant="h5"
-              color="text.secondary"
-              sx={{
-                mb: 4,
-                maxWidth: 700,
-                mx: 'auto',
-                fontWeight: 400,
-                fontSize: { xs: '1rem', md: '1.25rem' },
-              }}
-            >
-              Send encrypted files with confidence through your browser! End-to-end encryption that even we can't break.
-            </Typography>
-            <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <LoginButton size="large">Get Started Free</LoginButton>
-              <Button variant="outlined" size="large" href="#features">
-                Learn More
-              </Button>
-            </Box>
+        <Box sx={{ position: 'relative', zIndex: 1, maxWidth: 800 }}>
+          <Typography
+            variant="h2"
+            sx={{
+              fontWeight: 700,
+              mb: 2,
+              fontSize: { xs: '2rem', sm: '2.5rem', md: '3.5rem' },
+            }}
+          >
+            Secure Drop
+          </Typography>
+          <Typography
+            variant="h6"
+            color="text.secondary"
+            sx={{
+              mb: 4,
+              fontWeight: 400,
+              fontSize: { xs: '0.95rem', md: '1.1rem' },
+              lineHeight: 1.6,
+            }}
+          >
+            Send encrypted files with confidence through your browser. End-to-end encryption that even we can't break.
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <LoginButton size="large">Get Started</LoginButton>
+            <Button variant="outlined" size="large" href="#features">
+              Learn More
+            </Button>
           </Box>
         </Box>
       </Box>
 
-      {/* Features Section - Full Width */}
-      <Box sx={{ width: '100%', bgcolor: 'background.default', py: { xs: 8, sm: 12, md: 16 } }}>
-        <Box sx={{ px: { xs: 2, sm: 3 }, maxWidth: 1200, mx: 'auto' }}>
+      {/* Features */}
+      <Box sx={{ width: '100%', bgcolor: 'background.paper', py: { xs: 6, md: 8 }, px: { xs: 2, sm: 4, md: 6 } }}>
+        <Box sx={{ maxWidth: 1400, mx: 'auto' }}>
           <Typography
             id="features"
             variant="h4"
             sx={{
               textAlign: 'center',
-              mb: 8,
+              mb: 6,
               fontWeight: 600,
-              fontSize: { xs: '1.75rem', md: '2.125rem' },
+              fontSize: { xs: '1.5rem', md: '2rem' },
             }}
           >
-            Why Secure Drop?
+            Why Choose Secure Drop?
           </Typography>
           <Grid container spacing={4}>
             {features.map((feature, index) => (
               <Grid key={index} size={{ xs: 12, sm: 6, md: 3 }}>
-                <Card
-                  sx={{
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    textAlign: 'center',
-                  }}
-                >
-                  <CardContent>
-                    <Box sx={{ color: 'primary.main', mb: 2, display: 'flex', justifyContent: 'center' }}>
+                <Card sx={{ height: '100%', textAlign: 'center' }}>
+                  <CardContent sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                    <Box sx={{ color: 'primary.main', mb: 2, fontSize: 0 }}>
                       {feature.icon}
                     </Box>
-                    <Typography variant="h6" gutterBottom fontWeight={600}>
+                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
                       {feature.title}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body2" color="text.secondary" sx={{ flexGrow: 1 }}>
                       {feature.description}
                     </Typography>
                   </CardContent>
@@ -181,17 +177,16 @@ export const Landing: React.FC = () => {
         </Box>
       </Box>
 
-      {/* Security Notice Section - Full Width */}
-      <Box sx={{ width: '100%', bgcolor: 'primary.main', color: 'primary.contrastText', py: { xs: 8, sm: 12, md: 16 } }}>
-        <Box sx={{ px: { xs: 2, sm: 3 }, maxWidth: 1200, mx: 'auto', textAlign: 'center' }}>
-          <LockIcon sx={{ fontSize: 48, mb: 2 }} />
-          <Typography variant="h5" gutterBottom fontWeight={600} sx={{ mb: 3 }}>
+      {/* CTA Section */}
+      <Box sx={{ width: '100%', bgcolor: 'primary.main', color: 'primary.contrastText', py: { xs: 6, md: 8 }, px: { xs: 2, sm: 4, md: 6 } }}>
+        <Box sx={{ maxWidth: 900, mx: 'auto', textAlign: 'center' }}>
+          <LockIcon sx={{ fontSize: 56, mb: 2 }} />
+          <Typography variant="h5" sx={{ fontWeight: 600, mb: 3 }}>
             Your Security is Our Priority
           </Typography>
-          <Typography variant="body1" sx={{ maxWidth: 800, mx: 'auto', mb: 4, lineHeight: 1.6 }}>
-            PigeonHole is powered by GPG client-side encryption to ensure that your files are secure before they ever leave your
-            device. Your private keys are stored only in your browser securely and where no other app can access, giving you complete
-            control over your data.
+          <Typography variant="body1" sx={{ mb: 4, lineHeight: 1.7, fontSize: { xs: '0.95rem', md: '1rem' } }}>
+            PigeonHole uses GPG client-side encryption to ensure your files are secure before they leave your device. Your private keys stay
+            only in your browser, where no other app can access them. You have complete control over your data.
           </Typography>
           <LoginButton variant="outlined" size="large">
             Start Encrypting Now
@@ -199,10 +194,10 @@ export const Landing: React.FC = () => {
         </Box>
       </Box>
 
-      {/* Footer - Full Width */}
-      <Box sx={{ width: '100%', bgcolor: 'background.paper', borderTop: '1px solid', borderColor: 'divider', mt: 'auto' }}>
-        <Box sx={{ py: 3, px: { xs: 2, sm: 3 }, maxWidth: 1200, mx: 'auto' }}>
-          <Typography variant="body2" color="text.secondary" align="center">
+      {/* Footer */}
+      <Box sx={{ width: '100%', bgcolor: 'background.paper', borderTop: '1px solid', borderColor: 'divider', py: 3, px: { xs: 2, sm: 4, md: 6 } }}>
+        <Box sx={{ maxWidth: 1400, mx: 'auto', textAlign: 'center' }}>
+          <Typography variant="body2" color="text.secondary">
             © 2026 PigeonHole. Secure file sharing with end-to-end encryption.
           </Typography>
         </Box>

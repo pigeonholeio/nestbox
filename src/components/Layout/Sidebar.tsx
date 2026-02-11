@@ -37,12 +37,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ variant }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const { sidebarOpen, setSidebarOpen } = useUIStore();
 
-  // Auto close sidebar when resizing to mobile
+  // Auto close sidebar only when resizing from desktop to mobile
   React.useEffect(() => {
-    if (isMobile && sidebarOpen) {
+    if (isMobile) {
       setSidebarOpen(false);
     }
-  }, [isMobile, sidebarOpen, setSidebarOpen]);
+  }, [isMobile, setSidebarOpen]);
 
   const drawerVariant = variant || (isMobile ? 'temporary' : 'permanent');
 

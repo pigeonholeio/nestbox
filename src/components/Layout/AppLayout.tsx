@@ -28,10 +28,10 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const { setSidebarOpen } = useUIStore();
+  const { sidebarOpen, toggleSidebar } = useUIStore();
 
   const handleMenuClick = () => {
-    setSidebarOpen(true);
+    toggleSidebar();
   };
 
   // Show menu button on mobile when sidebar is available

@@ -9,22 +9,20 @@ import {
   Divider,
   Button,
   CircularProgress,
-  TextField,
-  InputAdornment,
 } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import SearchIcon from '@mui/icons-material/Search';
 import { AppLayout } from '@/components/Layout/AppLayout';
 import { SecretsList } from '@/components/Receive/SecretsList';
 import { SearchSecretModal } from '@/components/Receive/SearchSecretModal';
 import { FilePreviewList } from '@/components/Receive/FilePreviewList';
-import { DualProgressIndicator } from '@/components/Send/DualProgressIndicator';
+import { DecryptionProgressIndicator } from '@/components/Receive/DecryptionProgressIndicator';
 import { ConfirmDialog, useConfirmDialog } from '@/components/Common/ConfirmDialog';
 import { usePigeonHoleAuth } from '@/hooks/usePigeonHoleAuth';
 import { useKeyManagement } from '@/hooks/useKeyManagement';
 import { useSecrets } from '@/hooks/useSecrets';
 import { useCrypto } from '@/hooks/useCrypto';
 import { downloadSecret } from '@/services/api/secret.api';
+import { downloadFile } from '@/services/fileHandling/tarGz';
 import type { DecryptedFile } from '@/types/secret.types';
 
 /**
@@ -76,10 +74,21 @@ export const ReceiveSecrets: React.FC = () => {
 
       const files = await decryptData(encryptedData, user.email);
 
+      // Step 3: Auto-download all files
+      setDownloadProgress({ stage: 'Downloading files...', percent: 90 });
+      for (const file of files) {
+        downloadFile(file);
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+
       setDownloadProgress({ stage: 'Complete!', percent: 100 });
       setDecryptedFiles(files);
-      setShowProgressDialog(false);
-      setShowFilesDialog(true);
+
+      // Show file preview dialog
+      setTimeout(() => {
+        setShowProgressDialog(false);
+        setShowFilesDialog(true);
+      }, 1000);
 
       // Refresh secrets list to update downloaded status
       await refresh();
@@ -87,6 +96,7 @@ export const ReceiveSecrets: React.FC = () => {
       console.error('Download/decrypt failed:', err);
       const errorMessage = err instanceof Error ? err.message : 'Failed to download and decrypt secret';
       setError(errorMessage);
+      setShowProgressDialog(false);
     } finally {
       setDownloadingSecretId(null);
     }
@@ -180,10 +190,9 @@ export const ReceiveSecrets: React.FC = () => {
           disableEscapeKeyDown
         >
           <DialogContent>
-            <DualProgressIndicator
-              encryptionProgress={decryptionProgress}
-              uploadProgress={downloadProgress}
-              isComplete={false}
+            <DecryptionProgressIndicator
+              decryptionProgress={decryptionProgress}
+              downloadProgress={downloadProgress}
             />
           </DialogContent>
         </Dialog>
