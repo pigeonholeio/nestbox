@@ -253,8 +253,8 @@ export const RecipientInput: React.FC<RecipientInputProps> = ({
             Transient Keys Enabled
           </Typography>
           <Typography variant="caption" display="block">
-            Some recipients will receive a temporary key. For better security, they should
-            create a PigeonHole account.
+            Some recipients will receive an ephemeral key. For better security, they should
+            create a PigeonHole account first.
           </Typography>
         </Alert>
       )}

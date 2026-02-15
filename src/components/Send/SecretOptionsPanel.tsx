@@ -32,7 +32,7 @@ export const SecretOptionsPanel: React.FC<SecretOptionsPanelProps> = ({
   onOnetimeChange,
   disabled = false,
 }) => {
-  const presets: ExpirationPreset[] = ['1hour', '24hours', '7days', '28days', 'never'];
+  const presets: ExpirationPreset[] = ['1hour', '24hours', '7days', '28days'];
 
   return (
     <Paper sx={{ p: 3 }}>

@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react';
 import {
-  Grid,
   TextField,
   Box,
   Typography,
@@ -113,18 +112,26 @@ export const KeysList: React.FC<KeysListProps> = ({
           </Typography>
         </Box>
       ) : (
-        <Grid container spacing={2}>
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: '1fr',
+              sm: 'repeat(2, 1fr)',
+              md: 'repeat(3, 1fr)',
+            },
+            gap: 2,
+          }}
+        >
           {filteredKeys.map((key) => (
-            <Grid item xs={12} sm={6} md={4} key={key.id}>
-              <KeyCard
-                key={key.id}
-                userKey={key}
-                onDelete={onDelete}
-                isDeleting={isDeletingKeyId === key.id}
-              />
-            </Grid>
+            <KeyCard
+              key={key.id}
+              userKey={key}
+              onDelete={onDelete}
+              isDeleting={isDeletingKeyId === key.id}
+            />
           ))}
-        </Grid>
+        </Box>
       )}
     </Box>
   );

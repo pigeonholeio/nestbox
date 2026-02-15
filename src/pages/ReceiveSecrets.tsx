@@ -16,6 +16,7 @@ import { SecretsList } from '@/components/Receive/SecretsList';
 import { SearchSecretModal } from '@/components/Receive/SearchSecretModal';
 import { FilePreviewList } from '@/components/Receive/FilePreviewList';
 import { DecryptionProgressIndicator } from '@/components/Receive/DecryptionProgressIndicator';
+import { SendSecretModal } from '@/components/Send/SendSecretModal';
 import { ConfirmDialog, useConfirmDialog } from '@/components/Common/ConfirmDialog';
 import { usePigeonHoleAuth } from '@/hooks/usePigeonHoleAuth';
 import { useKeyManagement } from '@/hooks/useKeyManagement';
@@ -43,6 +44,7 @@ export const ReceiveSecrets: React.FC = () => {
   const [downloadProgress, setDownloadProgress] = useState({ stage: 'Ready', percent: 0 });
   const [error, setError] = useState<string | null>(null);
   const [showSearchModal, setShowSearchModal] = useState(false);
+  const [showSendModal, setShowSendModal] = useState(false);
 
   // Check for key on mount
   useEffect(() => {
@@ -52,6 +54,15 @@ export const ReceiveSecrets: React.FC = () => {
       }
     }
   }, [isAuthenticated, user?.email, checkHasKey, navigate]);
+
+  // Refresh secrets list every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refresh();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [refresh]);
 
   // Handle download and decrypt
   const handleDownload = async (secretId: string) => {
@@ -73,13 +84,6 @@ export const ReceiveSecrets: React.FC = () => {
       setDownloadProgress({ stage: 'Decrypting...', percent: 0 });
 
       const files = await decryptData(encryptedData, user.email);
-
-      // Step 3: Auto-download all files
-      setDownloadProgress({ stage: 'Downloading files...', percent: 90 });
-      for (const file of files) {
-        downloadFile(file);
-        await new Promise(resolve => setTimeout(resolve, 100));
-      }
 
       setDownloadProgress({ stage: 'Complete!', percent: 100 });
       setDecryptedFiles(files);
@@ -136,16 +140,17 @@ export const ReceiveSecrets: React.FC = () => {
 
   return (
     <AppLayout
-      title="Received Secrets"
+      title="PigeonHole Secrets"
       showSidebar
       showHeader
       showSearchBar
       onSearchClick={() => setShowSearchModal(true)}
+      onSendClick={() => setShowSendModal(true)}
     >
-      <Box>
+      <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', p: { xs: 2, sm: 3, md: 4 } }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
           <Typography variant="h4" fontWeight={600}>
-            Received Secrets
+            PigeonHole
           </Typography>
           <Button
             variant="outlined"
@@ -219,6 +224,12 @@ export const ReceiveSecrets: React.FC = () => {
           onDownload={handleDownload}
           onDelete={handleDelete}
           downloadingSecretId={downloadingSecretId}
+        />
+
+        {/* Send Secret Modal */}
+        <SendSecretModal
+          open={showSendModal}
+          onClose={() => setShowSendModal(false)}
         />
 
         {/* Confirm Dialog */}

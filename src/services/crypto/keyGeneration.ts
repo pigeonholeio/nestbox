@@ -128,8 +128,10 @@ export async function initializeUserKeys(
   const { encryptedPrivateKey, iv, salt, keyMaterial } = await encryptPrivateKey(privateKey);
   onProgress?.(70);
 
-  // 3. Calculate thumbprint (70-90%)
-  const thumbprint = await calculateThumbprint(publicKey);
+  // 3. Calculate thumbprint and fingerprint (70-90%)
+  const publicKeyObj = await openpgp.readKey({ armoredKey: publicKey });
+  const thumbprint = publicKeyObj.getFingerprint();
+  const fingerprint = publicKeyObj.getFingerprint(); // fingerprint is the same as thumbprint in OpenPGP.js
   onProgress?.(90);
 
   // 4. Create key data object (90-100%)
@@ -137,6 +139,7 @@ export async function initializeUserKeys(
     encryptedPrivateKey,
     publicKey,
     thumbprint,
+    fingerprint,
     iv,
     salt,
     keyMaterial,

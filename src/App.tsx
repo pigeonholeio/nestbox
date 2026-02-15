@@ -71,7 +71,7 @@ function App() {
               />
 
               {/* Catch-all redirect */}
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path="*" element={<Navigate to="/receive" replace />} />
             </Routes>
           </BrowserRouter>
         </ThemeProvider>

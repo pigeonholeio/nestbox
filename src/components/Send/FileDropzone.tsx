@@ -6,7 +6,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemSecondaryAction,
   IconButton,
   Paper,
   Chip,
@@ -62,7 +61,7 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
       <Paper
         {...getRootProps()}
         sx={{
-          p: 4,
+          p: { xs: 2, sm: 4 },
           border: '2px dashed',
           borderColor: isDragActive ? 'primary.main' : 'divider',
           bgcolor: isDragActive ? 'action.hover' : 'background.paper',
@@ -77,8 +76,8 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
         }}
       >
         <input {...getInputProps()} />
-        <CloudUploadIcon sx={{ fontSize: 64, color: 'primary.main', mb: 2 }} />
-        <Typography variant="h6" gutterBottom>
+        <CloudUploadIcon sx={{ fontSize: { xs: 48, sm: 64 }, color: 'primary.main', mb: 2 }} />
+        <Typography variant="h6" gutterBottom sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}>
           {isDragActive ? 'Drop files here' : 'Drag & drop files here'}
         </Typography>
         <Typography variant="body2" color="text.secondary">
@@ -115,28 +114,31 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
                   borderRadius: 1,
                   border: '1px solid',
                   borderColor: 'divider',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: 1,
                 }}
               >
-                <InsertDriveFileIcon sx={{ mr: 2, color: 'text.secondary' }} />
-                <ListItemText
-                  primary={file.name}
-                  secondary={formatFileSize(file.size)}
-                  primaryTypographyProps={{
-                    noWrap: true,
-                    sx: { maxWidth: '80%' },
-                  }}
-                />
-                <ListItemSecondaryAction>
-                  <IconButton
-                    edge="end"
-                    aria-label="delete"
-                    onClick={() => onFileRemoved(file.id)}
-                    disabled={disabled}
-                    size="small"
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
+                <Box sx={{ display: 'flex', alignItems: 'center', minWidth: 0, flex: 1 }}>
+                  <InsertDriveFileIcon sx={{ mr: 2, color: 'text.secondary', flexShrink: 0 }} />
+                  <ListItemText
+                    primary={file.name}
+                    secondary={formatFileSize(file.size)}
+                    primaryTypographyProps={{
+                      noWrap: true,
+                    }}
+                  />
+                </Box>
+                <IconButton
+                  aria-label="delete"
+                  onClick={() => onFileRemoved(file.id)}
+                  disabled={disabled}
+                  size="small"
+                  sx={{ flexShrink: 0 }}
+                >
+                  <DeleteIcon />
+                </IconButton>
               </ListItem>
             ))}
           </List>

@@ -37,27 +37,35 @@ export async function createSecret(
  */
 export async function uploadToS3(
   url: string,
-  fields: Record<string, string>,
+  fields: Record<string, string | string[]>,
   encryptedData: Uint8Array,
   onProgress?: (percent: number) => void
 ): Promise<void> {
-  const formData = new FormData();
+  // Extract metadata from fields to send as headers
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/octet-stream',
+  };
 
-  // Add all S3 fields
-  Object.keys(fields).forEach((key) => {
-    formData.append(key, fields[key]);
+  // Add metadata headers if they exist in the fields
+  const metadataKeys = [
+    'x-amz-meta-sender_id',
+    'x-amz-meta-recipient_ids',
+    'x-amz-meta-reference',
+    'x-amz-meta-expiration',
+    'x-amz-meta-onetime',
+  ];
+
+  metadataKeys.forEach((key) => {
+    if (fields[key]) {
+      const value = fields[key];
+      headers[key] = Array.isArray(value) ? value.join(',') : String(value);
+    }
   });
 
-  // Add the encrypted file
-  const arrayBuffer = encryptedData.buffer as ArrayBuffer;
-  const blob = new Blob([arrayBuffer], { type: 'application/octet-stream' });
-  formData.append('file', blob, 'secret.pgp');
-
-  // Upload to S3
-  await axios.post(url, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
+  // For presigned PUT requests, send the file with the metadata headers
+  // The presigned URL in the query string provides authentication
+  await axios.put(url, encryptedData, {
+    headers,
     onUploadProgress: (progressEvent) => {
       if (onProgress && progressEvent.total) {
         const percentCompleted = Math.round(
@@ -107,19 +115,60 @@ export async function downloadSecret(
   secretId: string,
   onProgress?: (percent: number) => void
 ): Promise<Uint8Array> {
-  const response = await apiClient.get(`/secret/${secretId}/download`, {
-    responseType: 'arraybuffer',
-    onDownloadProgress: (progressEvent) => {
-      if (onProgress && progressEvent.total) {
-        const percentCompleted = Math.round(
-          (progressEvent.loaded * 100) / progressEvent.total
-        );
-        onProgress(percentCompleted);
-      }
-    },
-  });
+  try {
+    // First request to get the download URL
+    const response = await apiClient.get(`/secret/${secretId}/download`, {
+      validateStatus: (status) => status === 200,
+      timeout: 30000,
+    });
 
-  return new Uint8Array(response.data);
+    // Handle 200 response with download URL
+    if (response.status === 200) {
+      // Check for DownloadUrl in camelCase (from SDK) or downloadUrl
+      const downloadUrl = response.data?.DownloadUrl || response.data?.downloadUrl;
+
+      if (!downloadUrl) {
+        throw new Error('No download URL provided in response');
+      }
+
+      // Download the actual file from the S3 URL
+      // Use plain axios without auth interceptor since S3 presigned URLs include auth in the URL
+      const plainAxios = axios.create();
+
+      const fileResponse = await plainAxios.get(downloadUrl, {
+        responseType: 'arraybuffer',
+        onDownloadProgress: (progressEvent) => {
+          if (onProgress && progressEvent.total) {
+            const percentCompleted = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            onProgress(percentCompleted);
+          }
+        },
+      });
+
+      // Ensure data is converted to Uint8Array
+      const data = fileResponse.data;
+      if (data instanceof ArrayBuffer) {
+        return new Uint8Array(data);
+      } else if (data instanceof Uint8Array) {
+        return data;
+      } else if (typeof data === 'string') {
+        // If data is a string, encode it
+        const encoder = new TextEncoder();
+        return encoder.encode(data);
+      } else {
+        return new Uint8Array(data);
+      }
+    }
+
+    throw new Error('Invalid response from server');
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(`Failed to download secret: ${error.message}`);
+    }
+    throw error;
+  }
 }
 
 /**

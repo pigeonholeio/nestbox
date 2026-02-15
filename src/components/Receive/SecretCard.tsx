@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   Card,
   CardContent,
@@ -8,6 +8,7 @@ import {
   Chip,
   IconButton,
   Tooltip,
+  Button,
 } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -16,7 +17,9 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import DeleteIcon from '@mui/icons-material/Delete';
 import WarningIcon from '@mui/icons-material/Warning';
 import PersonIcon from '@mui/icons-material/Person';
+import BlockIcon from '@mui/icons-material/Block';
 import type { Secret } from '@/types/api.types';
+import { useKeyStore } from '@/stores/keyStore';
 
 interface SecretCardProps {
   secret: Secret;
@@ -34,6 +37,17 @@ export const SecretCard: React.FC<SecretCardProps> = ({
   onDelete,
   isDownloading,
 }) => {
+  const { currentKey } = useKeyStore();
+
+  // Check if current user has the key needed to decrypt this secret
+  const canDecrypt = useMemo(() => {
+    if (!secret.recipient_key_fingerprint) {
+      // If no fingerprint is stored, assume it can be decrypted (legacy support)
+      return true;
+    }
+    return currentKey?.fingerprint === secret.recipient_key_fingerprint;
+  }, [secret.recipient_key_fingerprint, currentKey?.fingerprint]);
+
   const formatFileSize = (bytes?: number): string => {
     if (!bytes) return 'Unknown size';
     if (bytes === 0) return '0 Bytes';
@@ -176,29 +190,50 @@ export const SecretCard: React.FC<SecretCardProps> = ({
               variant="outlined"
             />
           </Tooltip>
+
+          {secret.recipient_key_fingerprint && currentKey?.fingerprint && (
+            <Tooltip title={currentKey.fingerprint === secret.recipient_key_fingerprint ? 'Encrypted with your current key' : 'Encrypted with a different key'}>
+              <Chip
+                icon={currentKey.fingerprint === secret.recipient_key_fingerprint ? <CheckCircleIcon /> : <BlockIcon />}
+                label={currentKey.fingerprint === secret.recipient_key_fingerprint ? 'Your Key' : 'Different Key'}
+                size="small"
+                color={currentKey.fingerprint === secret.recipient_key_fingerprint ? 'success' : 'error'}
+                variant="outlined"
+              />
+            </Tooltip>
+          )}
         </Box>
       </CardContent>
 
       <CardActions sx={{ justifyContent: 'center', pb: 2 }}>
-        <Box sx={{ width: '100%', px: 2 }}>
-          <button
-            onClick={() => onDownload(secret.reference)}
-            disabled={isDownloading}
-            style={{
-              width: '100%',
-              padding: '12px',
-              fontSize: '1rem',
-              fontWeight: 600,
-              color: '#fff',
-              backgroundColor: isDownloading ? '#ccc' : '#3F51B5',
-              border: 'none',
-              borderRadius: '8px',
-              cursor: isDownloading ? 'not-allowed' : 'pointer',
-              transition: 'all 0.2s',
-            }}
-          >
-            {isDownloading ? 'Downloading...' : 'Download & Decrypt'}
-          </button>
+        <Box sx={{ width: '100%', px: { xs: 1, sm: 2 } }}>
+          {!canDecrypt && secret.recipient_key_fingerprint ? (
+            <Tooltip title={`This secret doesn't match your local key. Expected fingerprint: ${secret.recipient_key_fingerprint}. Your key fingerprint: ${currentKey?.fingerprint || 'N/A'}`}>
+              <span style={{ width: '100%', display: 'block' }}>
+                <Button
+                  fullWidth
+                  disabled
+                  variant="contained"
+                  color="inherit"
+                  startIcon={<BlockIcon />}
+                  sx={{ py: { xs: 1, sm: 1.5 }, fontSize: { xs: '0.875rem', sm: '1rem' } }}
+                >
+                  Key Mismatch
+                </Button>
+              </span>
+            </Tooltip>
+          ) : (
+            <Button
+              fullWidth
+              onClick={() => onDownload(secret.reference)}
+              disabled={isDownloading || !canDecrypt}
+              variant="contained"
+              color="primary"
+              sx={{ py: { xs: 1, sm: 1.5 }, fontSize: { xs: '0.875rem', sm: '1rem' } }}
+            >
+              {isDownloading ? 'Downloading...' : 'Download & Decrypt'}
+            </Button>
+          )}
         </Box>
       </CardActions>
     </Card>

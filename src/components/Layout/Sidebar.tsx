@@ -15,7 +15,6 @@ import {
   Link,
   Divider,
 } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
 import InboxIcon from '@mui/icons-material/Inbox';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import HelpIcon from '@mui/icons-material/Help';
@@ -47,8 +46,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ variant }) => {
   const drawerVariant = variant || (isMobile ? 'temporary' : 'permanent');
 
   const menuItems = [
-    { text: 'Check PigeonHole', icon: <InboxIcon />, path: '/receive' },
-    { text: 'Send Secret ', icon: <SendIcon />, path: '/send' },
+    { text: 'My PigeonHole', icon: <InboxIcon />, path: '/receive' },
     { text: 'My Keys', icon: <VpnKeyIcon />, path: '/keys' },
   ];
 
@@ -61,7 +59,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ variant }) => {
 
   const drawerContent = (
     <>
-      <Toolbar />
       <Box sx={{ overflow: 'auto', display: 'flex', flexDirection: 'column', height: '100%' }}>
         <List>
           {menuItems.map((item) => (
@@ -166,6 +163,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ variant }) => {
         '& .MuiDrawer-paper': {
           width: DRAWER_WIDTH,
           boxSizing: 'border-box',
+          height: '100%',
+          top: 0,
+          position: 'relative',
         },
       }}
       ModalProps={{

@@ -24,7 +24,7 @@ export const Landing: React.FC = () => {
 
   React.useEffect(() => {
     if (isAuthenticated) {
-      navigate('/send');
+      navigate('/receive');
     }
   }, [isAuthenticated, navigate]);
 
@@ -87,25 +87,11 @@ export const Landing: React.FC = () => {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          bgcolor: 'background.default',
-          backgroundImage: 'url(https://pigeono.io/assets/images/landing_page.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed',
+          bgcolor: 'background.paper',
           position: 'relative',
           py: { xs: 6, md: 0 },
           px: { xs: 2, sm: 4, md: 6 },
           textAlign: 'center',
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            bgcolor: 'rgba(255, 255, 255, 0.92)',
-            zIndex: 0,
-          },
         }}
       >
         <Box sx={{ position: 'relative', zIndex: 1, maxWidth: 800 }}>
@@ -115,6 +101,7 @@ export const Landing: React.FC = () => {
               fontWeight: 700,
               mb: 2,
               fontSize: { xs: '2rem', sm: '2.5rem', md: '3.5rem' },
+              color: 'primary.main',
             }}
           >
             Secure Drop

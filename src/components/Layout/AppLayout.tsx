@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Container, Toolbar, useMediaQuery, useTheme } from '@mui/material';
+import { Box, useMediaQuery, useTheme } from '@mui/material';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
 import { useUIStore } from '@/stores/uiStore';
@@ -12,6 +12,7 @@ interface AppLayoutProps {
   title?: string;
   showSearchBar?: boolean;
   onSearchClick?: () => void;
+  onSendClick?: () => void;
 }
 
 /**
@@ -21,14 +22,14 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
   children,
   showSidebar = false,
   showHeader = true,
-  maxWidth = false,
   title,
   showSearchBar,
   onSearchClick,
+  onSendClick,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const { sidebarOpen, toggleSidebar } = useUIStore();
+  const { toggleSidebar } = useUIStore();
 
   const handleMenuClick = () => {
     toggleSidebar();
@@ -38,7 +39,8 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
   const shouldShowMenuButton = isMobile && showSidebar;
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw', overflow: 'hidden' }}>
+      {/* Header */}
       {showHeader && (
         <Header
           title={title}
@@ -46,31 +48,28 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
           onMenuClick={handleMenuClick}
           showSearchBar={showSearchBar}
           onSearchClick={onSearchClick}
+          onSendClick={onSendClick}
         />
       )}
 
-      {showSidebar && <Sidebar />}
+      {/* Sidebar and Content Row */}
+      <Box sx={{ display: 'flex', flex: 1, width: '100%', minWidth: 0, overflow: 'hidden' }}>
+        {/* Sidebar */}
+        {showSidebar && <Sidebar />}
 
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          bgcolor: 'background.default',
-          minHeight: '100vh',
-          width: '100%',
-        }}
-      >
-        {showHeader && <Toolbar />}
-
-        <Container
-          maxWidth={maxWidth}
+        {/* Main Content Area */}
+        <Box
+          component="main"
           sx={{
-            py: 4,
-            px: { xs: 2, sm: 3 },
+            flex: 1,
+            width: '100%',
+            overflow: 'auto',
+            bgcolor: 'background.default',
+            minWidth: 0,
           }}
         >
           {children}
-        </Container>
+        </Box>
       </Box>
     </Box>
   );

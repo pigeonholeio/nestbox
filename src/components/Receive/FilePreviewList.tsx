@@ -5,7 +5,6 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  ListItemSecondaryAction,
   IconButton,
   Button,
   Paper,
@@ -69,7 +68,7 @@ export const FilePreviewList: React.FC<FilePreviewListProps> = ({
         <Box>
           <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <CheckCircleIcon color="success" />
-            Files Decrypted Successfully
+            Files Ephemerally Decrypted Successfully
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {files.length} file{files.length !== 1 ? 's' : ''} ({formatFileSize(totalSize)})
@@ -100,29 +99,32 @@ export const FilePreviewList: React.FC<FilePreviewListProps> = ({
               borderRadius: 1,
               border: '1px solid',
               borderColor: 'divider',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 1,
             }}
           >
-            <ListItemIcon>
-              <InsertDriveFileIcon color="primary" />
-            </ListItemIcon>
-            <ListItemText
-              primary={file.name}
-              secondary={formatFileSize(file.size)}
-              primaryTypographyProps={{
-                noWrap: true,
-                sx: { maxWidth: '80%' },
-              }}
-            />
-            <ListItemSecondaryAction>
-              <IconButton
-                edge="end"
-                onClick={() => handleDownloadFile(file)}
-                color={downloadedFiles.has(file.name) ? 'success' : 'primary'}
-                aria-label={`download ${file.name}`}
-              >
-                {downloadedFiles.has(file.name) ? <CheckCircleIcon /> : <DownloadIcon />}
-              </IconButton>
-            </ListItemSecondaryAction>
+            <Box sx={{ display: 'flex', alignItems: 'center', minWidth: 0, flex: 1 }}>
+              <ListItemIcon sx={{ minWidth: 40 }}>
+                <InsertDriveFileIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText
+                primary={file.name}
+                secondary={formatFileSize(file.size)}
+                primaryTypographyProps={{
+                  noWrap: true,
+                }}
+              />
+            </Box>
+            <IconButton
+              onClick={() => handleDownloadFile(file)}
+              color={downloadedFiles.has(file.name) ? 'success' : 'primary'}
+              aria-label={`download ${file.name}`}
+              sx={{ flexShrink: 0 }}
+            >
+              {downloadedFiles.has(file.name) ? <CheckCircleIcon /> : <DownloadIcon />}
+            </IconButton>
           </ListItem>
         ))}
       </List>

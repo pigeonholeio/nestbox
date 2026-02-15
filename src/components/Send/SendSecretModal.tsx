@@ -1,35 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Alert, Snackbar, Divider } from '@mui/material';
-import { AppLayout } from '@/components/Layout/AppLayout';
-import { FileDropzone } from '@/components/Send/FileDropzone';
-import { RecipientInput } from '@/components/Send/RecipientInput';
-import { SecretOptionsPanel } from '@/components/Send/SecretOptionsPanel';
-import { DualProgressIndicator } from '@/components/Send/DualProgressIndicator';
-import { SendSecretButton } from '@/components/Send/SendSecretButton';
-import { SearchSecretModal } from '@/components/Receive/SearchSecretModal';
-import { usePigeonHoleAuth } from '@/hooks/usePigeonHoleAuth';
-import { useKeyManagement } from '@/hooks/useKeyManagement';
+import { Dialog, DialogContent, DialogTitle, Box, Divider, Alert, Snackbar } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import { FileDropzone } from './FileDropzone';
+import { RecipientInput } from './RecipientInput';
+import { SecretOptionsPanel } from './SecretOptionsPanel';
+import { DualProgressIndicator } from './DualProgressIndicator';
+import { SendSecretButton } from './SendSecretButton';
 import { useCrypto } from '@/hooks/useCrypto';
 import { useRecipientSearch } from '@/hooks/useRecipientSearch';
-import { useSecrets } from '@/hooks/useSecrets';
-import { createSecret, uploadToS3, downloadSecret } from '@/services/api/secret.api';
+import { createSecret, uploadToS3 } from '@/services/api/secret.api';
 import { generateRandomPet } from '@/utils/randomPet';
 import type { FileWithPreview, Recipient, ExpirationPreset } from '@/types/secret.types';
 import { EXPIRATION_PRESETS } from '@/types/secret.types';
 import type { User } from '@/types/api.types';
 
+interface SendSecretModalProps {
+  open: boolean;
+  onClose: () => void;
+}
+
 /**
- * Main secret sending page
+ * Modal dialog for sending secrets
  */
-export const SendSecret: React.FC = () => {
-  const navigate = useNavigate();
-  const { isAuthenticated, user } = usePigeonHoleAuth();
-  const { checkHasKey } = useKeyManagement();
+export const SendSecretModal: React.FC<SendSecretModalProps> = ({
+  open,
+  onClose,
+}) => {
   const { encryptFiles, encryptionProgress } = useCrypto();
   const { searchUser } = useRecipientSearch();
-  const { secrets, deleteSecret } = useSecrets(true);
-  const { decryptData } = useCrypto();
 
   const [files, setFiles] = useState<FileWithPreview[]>([]);
   const [recipients, setRecipients] = useState<Recipient[]>([]);
@@ -44,16 +42,22 @@ export const SendSecret: React.FC = () => {
   const [isComplete, setIsComplete] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [showSearchModal, setShowSearchModal] = useState(false);
 
-  // Check for key on mount
+  // Reset form when modal closes
   useEffect(() => {
-    if (isAuthenticated && user?.email) {
-      if (!checkHasKey(user.email)) {
-        navigate('/onboarding', { replace: true });
-      }
+    if (!open) {
+      setFiles([]);
+      setRecipients([]);
+      setRecipientUsers([]);
+      setReference('');
+      setOnetime(false);
+      setExpiration('28days');
+      setShowProgress(false);
+      setIsComplete(false);
+      setError(null);
+      setShowSuccess(false);
     }
-  }, [isAuthenticated, user?.email, checkHasKey, navigate]);
+  }, [open]);
 
   // Handle file addition
   const handleFilesAdded = (newFiles: File[]) => {
@@ -75,7 +79,6 @@ export const SendSecret: React.FC = () => {
     const user = await searchUser(email, useTransient);
 
     if (user) {
-      // Store the user for later use
       setRecipientUsers((prev) => {
         const exists = prev.some((u) => u.id === user.id);
         return exists ? prev : [...prev, user];
@@ -155,16 +158,9 @@ export const SendSecret: React.FC = () => {
       setIsComplete(true);
       setShowSuccess(true);
 
-      // Reset form after brief delay
+      // Close modal and reset form after brief delay
       setTimeout(() => {
-        setFiles([]);
-        setRecipients([]);
-        setRecipientUsers([]);
-        setReference('');
-        setOnetime(false);
-        setExpiration('28days');
-        setShowProgress(false);
-        setIsComplete(false);
+        onClose();
       }, 3000);
     } catch (err) {
       console.error('Send failed:', err);
@@ -174,38 +170,41 @@ export const SendSecret: React.FC = () => {
     }
   };
 
-  // Handle download from search modal
-  const handleDownload = async (secretId: string) => {
-    if (!user?.email) return;
-
-    try {
-      const encryptedData = await downloadSecret(secretId);
-      const files = await decryptData(encryptedData, user.email);
-      // Files would be displayed in a modal in a real scenario
-      console.log('Downloaded files:', files);
-    } catch (err) {
-      console.error('Download/decrypt failed:', err);
-    }
-  };
-
   return (
-    <AppLayout
-      title="Send Secret"
-      showSidebar
-      showHeader
-      showSearchBar={true}
-      onSearchClick={() => setShowSearchModal(true)}
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="sm"
+      fullWidth
+      PaperProps={{
+        sx: {
+          maxHeight: '90vh',
+          overflow: 'auto',
+        },
+      }}
     >
-      <Box>
-        <Typography variant="h4" gutterBottom fontWeight={600}>
-          Send a Secret
-        </Typography>
-        <Typography variant="body1" color="text.secondary" paragraph>
-          Securely share encrypted files with anyone. All encryption happens in your browser.
-        </Typography>
+      <DialogTitle
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          pb: 1,
+        }}
+      >
+        Send a Secret
+        <CloseIcon
+          sx={{
+            cursor: 'pointer',
+            opacity: 0.7,
+            '&:hover': { opacity: 1 },
+          }}
+          onClick={onClose}
+        />
+      </DialogTitle>
 
-        <Divider sx={{ my: 3 }} />
+      <Divider />
 
+      <DialogContent sx={{ pt: 3 }}>
         {error && (
           <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError(null)}>
             {error}
@@ -257,17 +256,7 @@ export const SendSecret: React.FC = () => {
           onClose={() => setShowSuccess(false)}
           message="Secret sent successfully! Your recipients have been notified."
         />
-
-        {/* Search Modal */}
-        <SearchSecretModal
-          open={showSearchModal}
-          onClose={() => setShowSearchModal(false)}
-          secrets={secrets}
-          onDownload={handleDownload}
-          onDelete={deleteSecret}
-          downloadingSecretId={null}
-        />
-      </Box>
-    </AppLayout>
+      </DialogContent>
+    </Dialog>
   );
 };

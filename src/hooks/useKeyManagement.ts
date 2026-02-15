@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useKeyStore, hasStoredKey } from '@/stores/keyStore';
 import { useAuthStore } from '@/stores/authStore';
+import { getCurrentUserKeys } from '@/services/api/user.api';
 
 /**
  * Hook for managing user encryption keys
@@ -44,6 +45,33 @@ export function useKeyManagement() {
     return hasStoredKey(emailToCheck);
   };
 
+  const validateAndSyncKeys = async (): Promise<void> => {
+    if (!auth0User || !auth0Token) {
+      throw new Error('User must be authenticated to sync keys');
+    }
+
+    try {
+      // Get remote keys from API
+      const remoteKeysResponse = await getCurrentUserKeys();
+      const remoteKeys = remoteKeysResponse.keys || [];
+      const localThumbprint = currentKey?.thumbprint;
+
+      // Check if local key matches any remote key
+      const hasMatchingRemoteKey = localThumbprint && remoteKeys.some(
+        (k) => k.thumbprint === localThumbprint
+      );
+
+      // If no matching key found or no remote keys exist, generate and upload new key
+      if (!hasMatchingRemoteKey) {
+        await generateKey();
+      }
+    } catch (err) {
+      console.error('Key sync failed:', err);
+      // Fallback: generate new key if sync fails
+      await generateKey();
+    }
+  };
+
   return {
     currentKey,
     hasKey,
@@ -53,5 +81,6 @@ export function useKeyManagement() {
     generateKey,
     clearCurrentKey,
     checkHasKey,
+    validateAndSyncKeys,
   };
 }

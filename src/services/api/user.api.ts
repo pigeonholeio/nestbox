@@ -1,7 +1,6 @@
 import { apiClient } from './client';
 import type {
   UserMeResponse,
-  UserSearchParams,
   UserSearchResponse,
   UploadKeyRequest,
   UploadKeyResponse,
@@ -9,6 +8,31 @@ import type {
   CreateEphemeralUserRequest,
   CreateEphemeralUserResponse,
 } from '@/types/api.types';
+
+/**
+ * Generate a random pet name like Terraform's random_pet
+ */
+function generateRandomPet(): string {
+  const adjectives = [
+    'fluffy', 'quick', 'sleepy', 'lazy', 'happy', 'sad', 'brave', 'shy',
+    'smart', 'silly', 'calm', 'wild', 'tiny', 'giant', 'swift', 'slow',
+    'jolly', 'gloomy', 'bright', 'dark', 'warm', 'cool', 'soft', 'hard',
+    'sweet', 'bitter', 'salty', 'spicy', 'smooth', 'rough', 'clean', 'dirty'
+  ];
+
+  const animals = [
+    'pigeon', 'dove', 'eagle', 'hawk', 'owl', 'raven', 'crow', 'sparrow',
+    'finch', 'swallow', 'thrush', 'robin', 'lark', 'wren', 'jay', 'magpie',
+    'stork', 'crane', 'heron', 'egret', 'albatross', 'pelican', 'puffin', 'tern',
+    'gull', 'kestrel', 'falcon', 'buzzard', 'condor', 'vulture', 'kingfisher', 'woodpecker'
+  ];
+
+  const randomAdjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+  const randomAnimal = animals[Math.floor(Math.random() * animals.length)];
+  const randomNumber = Math.floor(Math.random() * 10000);
+
+  return `${randomAdjective}-${randomAnimal}-${randomNumber}`;
+}
 
 /**
  * Get current user details
@@ -31,15 +55,18 @@ export async function getCurrentUserKeys(): Promise<ValidateKeyResponse> {
  */
 export async function uploadPublicKey(
   keyData: string,
-  thumbprint: string,
-  userEmail: string
+  thumbprint: string
 ): Promise<UploadKeyResponse> {
+  // Base64 encode the armored public key
+  const base64KeyData = btoa(keyData);
+
   const request: UploadKeyRequest = {
-    key_data: keyData,
+    key_data: base64KeyData,
     thumbprint: thumbprint,
-    reference: `${userEmail}_primary_key`,
+    reference: generateRandomPet(),
     only: true,
     force: false,
+    transient: false,
   };
 
   const response = await apiClient.post<UploadKeyResponse>('/user/me/key', request);
@@ -94,10 +121,14 @@ export async function uploadPublicKeyForUser(
   thumbprint: string,
   reference: string
 ): Promise<UploadKeyResponse> {
+  // Base64 encode the armored public key
+  const base64KeyData = btoa(keyData);
+
   const request: UploadKeyRequest = {
-    key_data: keyData,
+    key_data: base64KeyData,
     thumbprint: thumbprint,
     reference: reference,
+    transient: false,
   };
 
   const response = await apiClient.post<UploadKeyResponse>(
@@ -143,6 +174,21 @@ export async function searchUsers(
   emails: string[],
   includeEphemeralKeys: boolean = false
 ): Promise<UserSearchResponse> {
+  // If only one email and ephemeral keys are requested, try the ephemeral user endpoint first
+  if (includeEphemeralKeys && emails.length === 1) {
+    try {
+      const ephemeralResponse = await createEphemeralUser(emails[0]);
+      return {
+        message: 'Ephemeral user created',
+        users: [ephemeralResponse.user],
+      };
+    } catch (error) {
+      // Fall back to regular search if ephemeral creation fails
+      console.error('Failed to create ephemeral user, falling back to search:', error);
+    }
+  }
+
+  // Regular user search
   const params = new URLSearchParams();
   emails.forEach(email => params.append('email', email));
   params.append('ephemeralkeys', includeEphemeralKeys.toString());

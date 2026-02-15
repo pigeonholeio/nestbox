@@ -86,6 +86,7 @@ export interface UploadKeyRequest {
   reference: string;
   only?: boolean;
   force?: boolean;
+  transient?: boolean;
 }
 
 export interface UploadKeyResponse extends GeneralMessage {
@@ -99,7 +100,7 @@ export interface ValidateKeyResponse extends GeneralMessage {
 // Secret types
 export interface S3PresignedInfo {
   url: string;
-  fields: Record<string, string>;
+  fields: Record<string, string | string[]>;
 }
 
 export interface CreateSecretRequest {
@@ -112,7 +113,7 @@ export interface CreateSecretRequest {
 
 export interface SecretEnvelopeS3Info {
   url: string;
-  fields: Record<string, string>;
+  fields: Record<string, string | string[]>;
 }
 
 export interface CreateSecretResponse extends GeneralMessage {
@@ -132,6 +133,8 @@ export interface Secret {
   size: number;
   onetime: boolean;
   downloaded?: boolean;
+  recipient_key_thumbprint?: string;
+  recipient_key_fingerprint?: string;
 }
 
 export interface SecretListResponse extends GeneralMessage {

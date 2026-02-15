@@ -13,57 +13,54 @@ import { LoadingSpinner } from '@/components/Common/LoadingSpinner';
  */
 export const Onboarding: React.FC = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, isLoading: authLoading, user } = usePigeonHoleAuth();
+  const { isAuthenticated, isLoading: authLoading } = usePigeonHoleAuth();
   const {
     hasKey,
     generationProgress,
     error: keyError,
     generateKey,
-    checkHasKey,
   } = useKeyManagement();
 
   const [showWarning, setShowWarning] = useState(false);
   const [showGenerationModal, setShowGenerationModal] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [hasShownWarning, setHasShownWarning] = useState(false);
 
-  // Check if user already has a key
+  // Auto-navigate to /receive when keys are synced by usePigeonHoleAuth
   useEffect(() => {
-    if (user?.email) {
-      const userAlreadyHasKey = checkHasKey(user.email);
-      if (userAlreadyHasKey && !showWarning) {
-        // Show the "key ready" dialog if not already showing
-        setShowWarning(true);
-      }
+    if (isAuthenticated && !authLoading && hasKey) {
+      navigate('/receive', { replace: true });
     }
-  }, [user?.email, checkHasKey]);
+  }, [isAuthenticated, authLoading, hasKey, navigate]);
 
-  // Show warning dialog on mount
+  // Show warning dialog when user first logs in without local keys
   useEffect(() => {
-    if (isAuthenticated && !authLoading && !hasKey) {
+    if (isAuthenticated && !authLoading && !hasKey && !hasShownWarning) {
       setShowWarning(true);
+      setHasShownWarning(true);
     }
-  }, [isAuthenticated, authLoading, hasKey]);
+  }, [isAuthenticated, authLoading, hasKey, hasShownWarning]);
 
   // Handle warning acceptance
   const handleAcceptWarning = async () => {
     setShowWarning(false);
 
-    // If user already has a key, just navigate to app
+    // If user already has a key, navigate to receive
     if (hasKey) {
-      navigate('/send', { replace: true });
+      navigate('/receive', { replace: true });
       return;
     }
 
-    // Otherwise start key generation
+    // Show generation modal and generate key
     setShowGenerationModal(true);
 
     try {
       await generateKey();
       setIsComplete(true);
 
-      // Navigate to send page after a brief delay
+      // Navigate to receive after a brief delay
       setTimeout(() => {
-        navigate('/send', { replace: true });
+        navigate('/receive', { replace: true });
       }, 2000);
     } catch (error) {
       console.error('Key generation failed:', error);
@@ -87,7 +84,7 @@ export const Onboarding: React.FC = () => {
       setIsComplete(true);
 
       setTimeout(() => {
-        navigate('/send', { replace: true });
+        navigate('/receive', { replace: true });
       }, 2000);
     } catch (error) {
       console.error('Key generation retry failed:', error);

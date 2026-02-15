@@ -22,7 +22,7 @@ import { useKeyManagement } from '@/hooks/useKeyManagement';
 import { useSecrets } from '@/hooks/useSecrets';
 import { useCrypto } from '@/hooks/useCrypto';
 import { useAuthStore } from '@/stores/authStore';
-import { getCurrentUserKeys } from '@/services/api/user.api';
+import { getCurrentUserKeys, deletePublicKeyForUser, getCurrentUser } from '@/services/api/user.api';
 import { downloadSecret } from '@/services/api/secret.api';
 import type { UserKey } from '@/types/api.types';
 
@@ -32,11 +32,12 @@ import type { UserKey } from '@/types/api.types';
 export const MyKeys: React.FC = () => {
   const { isAuthenticated } = usePigeonHoleAuth();
   const { confirmDialogProps, showConfirm } = useConfirmDialog();
-  const { generateKey, generationProgress, error: keyError } = useKeyManagement();
+  const { generateKey } = useKeyManagement();
   const { secrets, deleteSecret: deleteSecret_api } = useSecrets(true);
   const { decryptData } = useCrypto();
   const { auth0User } = useAuthStore();
 
+  const [userId, setUserId] = useState<string | null>(null);
   const [keys, setKeys] = useState<UserKey[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeletingKeyId, setIsDeletingKeyId] = useState<string | null>(null);
@@ -45,19 +46,34 @@ export const MyKeys: React.FC = () => {
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
 
-  // Load keys on mount
+  // Load user ID and keys on mount
   useEffect(() => {
     if (isAuthenticated) {
-      loadKeys();
+      initializeUser();
     }
   }, [isAuthenticated]);
+
+  const initializeUser = async () => {
+    try {
+      const currentUser = await getCurrentUser();
+      setUserId(currentUser.user.id);
+      await loadKeys();
+    } catch (err) {
+      console.error('Failed to load user:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load user');
+    }
+  };
 
   const loadKeys = async () => {
     try {
       setIsLoading(true);
       setError(null);
       const response = await getCurrentUserKeys();
-      setKeys(response.keys || []);
+      if (response && response.keys) {
+        setKeys(response.keys);
+      } else {
+        setKeys([]);
+      }
     } catch (err) {
       console.error('Failed to load keys:', err);
       setError(err instanceof Error ? err.message : 'Failed to load keys');
@@ -78,8 +94,9 @@ export const MyKeys: React.FC = () => {
       onConfirm: async () => {
         try {
           setIsDeletingKeyId(keyId);
-          // TODO: Implement deleteKey API call when endpoint is available
-          // await deleteKey(keyId);
+          if (userId) {
+            await deletePublicKeyForUser(userId, keyId);
+          }
           setKeys(keys.filter((k) => k.id !== keyId));
         } catch (err) {
           console.error('Delete failed:', err);
@@ -108,6 +125,18 @@ export const MyKeys: React.FC = () => {
     setIsRegenerating(true);
 
     try {
+      // Delete all existing keys remotely
+      if (userId) {
+        for (const key of keys) {
+          try {
+            await deletePublicKeyForUser(userId, key.id);
+          } catch (err) {
+            console.error('Failed to delete key:', key.id, err);
+          }
+        }
+      }
+
+      // Generate new key
       await generateKey();
       // Reload keys after successful generation
       await loadKeys();
@@ -142,8 +171,8 @@ export const MyKeys: React.FC = () => {
       showSearchBar={true}
       onSearchClick={() => setShowSearchModal(true)}
     >
-      <Box>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, gap: 2 }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', p: { xs: 2, sm: 3, md: 4 } }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
           <Typography variant="h4" fontWeight={600}>
             My Keys
           </Typography>

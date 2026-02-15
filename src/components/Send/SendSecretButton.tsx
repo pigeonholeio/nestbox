@@ -32,7 +32,7 @@ export const SendSecretButton: React.FC<SendSecretButtonProps> = ({
   };
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4, px: 2 }}>
       <Button
         variant="contained"
         size="large"
@@ -40,10 +40,12 @@ export const SendSecretButton: React.FC<SendSecretButtonProps> = ({
         disabled={!canSend}
         startIcon={isSending ? <CircularProgress size={20} color="inherit" /> : <SendIcon />}
         sx={{
-          minWidth: 200,
+          minWidth: { xs: 'auto', sm: 200 },
+          maxWidth: '100%',
           py: 1.5,
-          fontSize: '1.1rem',
+          fontSize: 'clamp(0.875rem, 2vw, 1.1rem)',
           fontWeight: 600,
+          px: { xs: 2, sm: 3 },
         }}
       >
         {getButtonText()}

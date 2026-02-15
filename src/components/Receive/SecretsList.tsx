@@ -58,14 +58,16 @@ export const SecretsList: React.FC<SecretsListProps> = ({
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
         (s) =>
-          s.sender_email.toLowerCase().includes(query) ||
+          (s.sender_email || s.sender || '').toLowerCase().includes(query) ||
           s.reference.toLowerCase().includes(query)
       );
     }
 
     // Sort by created date (newest first)
     filtered.sort((a, b) => {
-      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      const dateA = new Date(a.created_at || a.sent_at).getTime();
+      const dateB = new Date(b.created_at || b.sent_at).getTime();
+      return dateB - dateA;
     });
 
     return filtered;
@@ -92,7 +94,7 @@ export const SecretsList: React.FC<SecretsListProps> = ({
   }
 
   return (
-    <Box>
+    <Box sx={{ width: '100%' }}>
       <Box sx={{ mb: 3, display: 'flex', gap: 2, flexWrap: 'wrap' }}>
         <TextField
           placeholder="Search by sender or reference..."
@@ -135,9 +137,9 @@ export const SecretsList: React.FC<SecretsListProps> = ({
             Showing {filteredSecrets.length} of {secrets.length} secrets
           </Typography>
 
-          <Grid container spacing={3}>
+          <Grid container spacing={2} sx={{ width: '100%', margin: 0 }}>
             {filteredSecrets.map((secret) => (
-              <Grid key={secret.reference} size={{ xs: 12, sm: 6, md: 6 }}>
+              <Grid key={secret.reference} size={{ xs: 12, sm: 6, md: 4 }}>
                 <SecretCard
                   secret={secret}
                   onDownload={onDownload}

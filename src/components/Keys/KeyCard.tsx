@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   Card,
   CardContent,
@@ -12,7 +12,9 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import LockIcon from '@mui/icons-material/Lock';
+import StorageIcon from '@mui/icons-material/Storage';
 import type { UserKey } from '@/types/api.types';
+import { useKeyStore } from '@/stores/keyStore';
 
 interface KeyCardProps {
   userKey: UserKey;
@@ -28,8 +30,15 @@ export const KeyCard: React.FC<KeyCardProps> = ({
   onDelete,
   isDeleting,
 }) => {
+  const { currentKey } = useKeyStore();
+
   const isEphemeral = userKey.reference?.includes('ephemeral');
   const thumbprintShort = userKey.thumbprint.substring(0, 16) + '...';
+
+  // Check if the private key for this public key exists in the browser
+  const hasPrivateKey = useMemo(() => {
+    return currentKey?.thumbprint === userKey.thumbprint;
+  }, [currentKey?.thumbprint, userKey.thumbprint]);
 
   const handleCopyThumbprint = () => {
     navigator.clipboard.writeText(userKey.thumbprint);
@@ -106,6 +115,28 @@ export const KeyCard: React.FC<KeyCardProps> = ({
               color="success"
               variant="outlined"
             />
+          )}
+
+          {hasPrivateKey ? (
+            <Tooltip title="Private key is stored in this browser">
+              <Chip
+                icon={<StorageIcon />}
+                label="Private Key Available"
+                size="small"
+                color="primary"
+                variant="filled"
+              />
+            </Tooltip>
+          ) : (
+            <Tooltip title="Private key is not stored in this browser">
+              <Chip
+                icon={<StorageIcon />}
+                label="No Local Key Found"
+                size="small"
+                color="default"
+                variant="outlined"
+              />
+            </Tooltip>
           )}
         </Box>
       </CardContent>

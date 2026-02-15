@@ -49,7 +49,40 @@ export const lightTheme: Theme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'Roboto, "Helvetica Neue", Arial, sans-serif',
+    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    h1: {
+      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      fontWeight: 700,
+    },
+    h2: {
+      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      fontWeight: 700,
+    },
+    h3: {
+      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      fontWeight: 700,
+    },
+    h4: {
+      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      fontWeight: 600,
+    },
+    h5: {
+      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      fontWeight: 600,
+    },
+    h6: {
+      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      fontWeight: 600,
+    },
+    body1: {
+      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    },
+    body2: {
+      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    },
+    button: {
+      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    },
   },
   shape: {
     borderRadius: 8,
@@ -108,7 +141,40 @@ export const darkTheme: Theme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'Roboto, "Helvetica Neue", Arial, sans-serif',
+    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    h1: {
+      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      fontWeight: 700,
+    },
+    h2: {
+      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      fontWeight: 700,
+    },
+    h3: {
+      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      fontWeight: 700,
+    },
+    h4: {
+      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      fontWeight: 600,
+    },
+    h5: {
+      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      fontWeight: 600,
+    },
+    h6: {
+      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      fontWeight: 600,
+    },
+    body1: {
+      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    },
+    body2: {
+      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    },
+    button: {
+      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    },
   },
   shape: {
     borderRadius: 8,

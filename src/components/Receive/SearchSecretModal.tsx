@@ -9,7 +9,6 @@ import {
   Box,
   Typography,
   Alert,
-  CircularProgress,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import type { Secret } from '@/types/api.types';
@@ -72,7 +71,7 @@ export const SearchSecretModal: React.FC<SearchSecretModalProps> = ({
           </Typography>
         )}
 
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, maxHeight: 400, overflowY: 'auto' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, maxHeight: { xs: 300, sm: 400 }, overflowY: 'auto' }}>
           {filteredSecrets.map((secret) => (
             <Box key={secret.reference || Math.random()}>
               <SecretCard
