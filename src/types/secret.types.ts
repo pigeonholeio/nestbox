@@ -32,9 +32,9 @@ export interface DecryptedFile {
   lastModified: number;
 }
 
-export type ExpirationPreset = '1hour' | '24hours' | '7days' | '28days';
+export type ExpirationPreset = '1hour' | '24hours' | '7days' | '28days' | 'never';
 
-export const EXPIRATION_PRESETS: Record<ExpirationPreset, { label: string; hours: number | null }> = {
+export const EXPIRATION_PRESETS: Record<Exclude<ExpirationPreset, 'never'>, { label: string; hours: number | null }> = {
   '1hour': { label: '1 Hour', hours: 1 },
   '24hours': { label: '24 Hours', hours: 24 },
   '7days': { label: '7 Days', hours: 168 },

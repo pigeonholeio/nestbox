@@ -32,7 +32,7 @@ export const SecretOptionsPanel: React.FC<SecretOptionsPanelProps> = ({
   onOnetimeChange,
   disabled = false,
 }) => {
-  const presets: ExpirationPreset[] = ['1hour', '24hours', '7days', '28days'];
+  const presets: ExpirationPreset[] = ['1hour', '24hours', '7days', '28days', 'never'];
 
   return (
     <Paper sx={{ p: 3 }}>
@@ -65,8 +65,12 @@ export const SecretOptionsPanel: React.FC<SecretOptionsPanelProps> = ({
           }}
         >
           {presets.map((preset) => (
-            <ToggleButton key={preset} value={preset} aria-label={EXPIRATION_PRESETS[preset].label}>
-              {EXPIRATION_PRESETS[preset].label}
+            <ToggleButton
+              key={preset}
+              value={preset}
+              aria-label={preset === 'never' ? 'Never expire' : EXPIRATION_PRESETS[preset].label}
+            >
+              {preset === 'never' ? 'Never' : EXPIRATION_PRESETS[preset].label}
             </ToggleButton>
           ))}
         </ToggleButtonGroup>
@@ -76,7 +80,7 @@ export const SecretOptionsPanel: React.FC<SecretOptionsPanelProps> = ({
             ? 'Secret will never expire automatically'
             : expiration === '28days'
             ? 'Default: Secret expires in 28 days'
-            : `Secret will expire in ${EXPIRATION_PRESETS[expiration].label.toLowerCase()}`}
+            : `Secret will expire in ${EXPIRATION_PRESETS[expiration as Exclude<ExpirationPreset, 'never'>].label.toLowerCase()}`}
         </Typography>
       </Box>
 

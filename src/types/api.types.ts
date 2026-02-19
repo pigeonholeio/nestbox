@@ -106,6 +106,7 @@ export interface S3PresignedInfo {
 export interface CreateSecretRequest {
   recipient_ids: string[];
   reference: string;
+  total_payload_size: number;
   ephemeralkeys: boolean;
   onetime: boolean;
   expiration?: string;
@@ -154,4 +155,17 @@ export interface CreateEphemeralUserRequest {
 export interface CreateEphemeralUserResponse extends GeneralMessage {
   user: User;
   keys: UserKey[];
+}
+
+export interface AnalyticsData {
+  secrets_sent: number;
+  secrets_received: number;
+  active_secrets_sent: number;
+  max_secrets_quota: number;
+  total_bytes_sent: number;
+  max_bytes_quota: number;
+}
+
+export interface AnalyticsResponse extends GeneralMessage {
+  analytics: AnalyticsData;
 }

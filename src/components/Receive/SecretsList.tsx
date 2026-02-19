@@ -14,6 +14,7 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import InboxIcon from '@mui/icons-material/Inbox';
 import { SecretCard } from './SecretCard';
+import { useKeyStore } from '@/stores/keyStore';
 import type { Secret } from '@/types/api.types';
 
 interface SecretsListProps {
@@ -23,7 +24,7 @@ interface SecretsListProps {
   downloadingSecretId: string | null;
 }
 
-type FilterType = 'all' | 'unread' | 'expiring';
+type FilterType = 'all' | 'decryptable' | 'expiring';
 
 /**
  * List/grid view of received secrets with filtering
@@ -34,15 +35,20 @@ export const SecretsList: React.FC<SecretsListProps> = ({
   onDelete,
   downloadingSecretId,
 }) => {
-  const [filter, setFilter] = React.useState<FilterType>('all');
+  const { currentKey } = useKeyStore();
+  const [filter, setFilter] = React.useState<FilterType>('decryptable');
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const filteredSecrets = React.useMemo(() => {
     let filtered = [...secrets];
 
     // Apply filter
-    if (filter === 'unread') {
-      filtered = filtered.filter((s) => !s.downloaded);
+    if (filter === 'decryptable') {
+      const currentFingerprint = currentKey?.fingerprint;
+      filtered = filtered.filter((s) =>
+        !s.recipient_key_fingerprint ||
+        s.recipient_key_fingerprint === currentFingerprint
+      );
     } else if (filter === 'expiring') {
       filtered = filtered.filter((s) => {
         if (!s.expiration) return false;
@@ -71,7 +77,7 @@ export const SecretsList: React.FC<SecretsListProps> = ({
     });
 
     return filtered;
-  }, [secrets, filter, searchQuery]);
+  }, [secrets, filter, searchQuery, currentKey?.fingerprint]);
 
   if (secrets.length === 0) {
     return (
@@ -119,7 +125,7 @@ export const SecretsList: React.FC<SecretsListProps> = ({
             onChange={(e) => setFilter(e.target.value as FilterType)}
           >
             <MenuItem value="all">All Secrets</MenuItem>
-            <MenuItem value="unread">Unread</MenuItem>
+            <MenuItem value="decryptable">Decryptable</MenuItem>
             <MenuItem value="expiring">Expiring Soon</MenuItem>
           </Select>
         </FormControl>

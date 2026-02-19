@@ -14,6 +14,7 @@ import type {
 export async function createSecret(
   recipientIds: string[],
   reference: string,
+  payloadSize: number,
   options: {
     ephemeralkeys: boolean;
     onetime: boolean;
@@ -23,13 +24,37 @@ export async function createSecret(
   const request: CreateSecretRequest = {
     recipient_ids: recipientIds,
     reference,
+    total_payload_size: payloadSize,
     ephemeralkeys: options.ephemeralkeys,
     onetime: options.onetime,
     expiration: options.expiration,
   };
 
-  const response = await apiClient.post<CreateSecretResponse>('/secret', request);
-  return response.data;
+  try {
+    const response = await apiClient.post<CreateSecretResponse>('/secret', request);
+    return response.data;
+  } catch (error: any) {
+    // Handle quota exceeded errors with detailed messages
+    if (error.response?.status === 429 || error.response?.status === 413) {
+      const quotaErr = error.response.data;
+      if (quotaErr?.quota_type) {
+        let errorMessage = quotaErr.message || 'Quota exceeded';
+        if (quotaErr.quota_type === 'secrets_count') {
+          errorMessage = `Secret quota exceeded: ${quotaErr.current_usage}/${quotaErr.limit} secrets. Delete a secret to send more.`;
+        } else if (quotaErr.quota_type === 'total_bytes') {
+          const currentMB = (quotaErr.current_usage / (1024 * 1024)).toFixed(1);
+          const limitMB = (quotaErr.limit / (1024 * 1024)).toFixed(1);
+          errorMessage = `Total data quota exceeded: ${currentMB}MB / ${limitMB}MB used. Try a smaller file.`;
+        } else if (quotaErr.quota_type === 'file_size') {
+          const fileMB = (quotaErr.requested / (1024 * 1024)).toFixed(1);
+          const limitMB = (quotaErr.limit / (1024 * 1024)).toFixed(1);
+          errorMessage = `File too large: ${fileMB}MB exceeds maximum of ${limitMB}MB.`;
+        }
+        throw new Error(errorMessage);
+      }
+    }
+    throw error;
+  }
 }
 
 /**

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { AppLayout } from '@/components/Layout/AppLayout';
+import { AnalyticsDashboard, type AnalyticsDashboardRef } from '@/components/Analytics/AnalyticsDashboard';
 import { SecretsList } from '@/components/Receive/SecretsList';
 import { SearchSecretModal } from '@/components/Receive/SearchSecretModal';
 import { FilePreviewList } from '@/components/Receive/FilePreviewList';
@@ -23,7 +24,6 @@ import { useKeyManagement } from '@/hooks/useKeyManagement';
 import { useSecrets } from '@/hooks/useSecrets';
 import { useCrypto } from '@/hooks/useCrypto';
 import { downloadSecret } from '@/services/api/secret.api';
-import { downloadFile } from '@/services/fileHandling/tarGz';
 import type { DecryptedFile } from '@/types/secret.types';
 
 /**
@@ -36,6 +36,7 @@ export const ReceiveSecrets: React.FC = () => {
   const { secrets, isLoading, error: secretsError, deleteSecret, refresh } = useSecrets(true);
   const { decryptData, decryptionProgress } = useCrypto();
   const { confirmDialogProps, showConfirm } = useConfirmDialog();
+  const analyticsDashboardRef = useRef<AnalyticsDashboardRef>(null);
 
   const [downloadingSecretId, setDownloadingSecretId] = useState<string | null>(null);
   const [showProgressDialog, setShowProgressDialog] = useState(false);
@@ -59,7 +60,7 @@ export const ReceiveSecrets: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       refresh();
-    }, 5000);
+    }, 30000);
 
     return () => clearInterval(interval);
   }, [refresh]);
@@ -136,6 +137,7 @@ export const ReceiveSecrets: React.FC = () => {
   const handleRefresh = async () => {
     setError(null);
     await refresh();
+    analyticsDashboardRef.current?.refresh();
   };
 
   return (
@@ -150,7 +152,7 @@ export const ReceiveSecrets: React.FC = () => {
       <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', p: { xs: 2, sm: 3, md: 4 } }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
           <Typography variant="h4" fontWeight={600}>
-            PigeonHole
+            Inbox
           </Typography>
           <Button
             variant="outlined"
@@ -167,6 +169,8 @@ export const ReceiveSecrets: React.FC = () => {
         </Typography>
 
         <Divider sx={{ my: 3 }} />
+
+        <AnalyticsDashboard ref={analyticsDashboardRef} />
 
         {(error || secretsError) && (
           <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError(null)}>

@@ -64,14 +64,14 @@ export const Landing: React.FC = () => {
             <Box
               component="img"
               src="/logo.png"
-              alt="PigeonHole"
+              alt="PigeonHole Logo"
               sx={{ height: 40 }}
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
               }}
             />
             <Typography variant="h6" sx={{ fontWeight: 700, color: 'primary.main' }}>
-              PigeonHole
+              [Beta] PigeonHole 
             </Typography>
           </Box>
           <LoginButton />
@@ -94,7 +94,7 @@ export const Landing: React.FC = () => {
           textAlign: 'center',
         }}
       >
-        <Box sx={{ position: 'relative', zIndex: 1, maxWidth: 800 }}>
+        <Box sx={{ position: 'relative', zIndex: 1, maxWidth: 800, paddingTop: "30px"}}>
           <Typography
             variant="h2"
             sx={{
@@ -104,7 +104,7 @@ export const Landing: React.FC = () => {
               color: 'primary.main',
             }}
           >
-            Secure Drop
+            Flight Deck
           </Typography>
           <Typography
             variant="h6"
@@ -116,11 +116,11 @@ export const Landing: React.FC = () => {
               lineHeight: 1.6,
             }}
           >
-            Send encrypted files with confidence through your browser. End-to-end encryption that even we can't break.
+            Send encrypted files with total confidence - right from your browser,<br/>powered by <a href="https://pigeono.io" target='_blank'>PigeonHole</a>. <br /><br />End-to-end encryption that even we can't break.
           </Typography>
           <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
             <LoginButton size="large">Get Started</LoginButton>
-            <Button variant="outlined" size="large" href="#features">
+            <Button variant="outlined" size="large" href="https://pigeono.io" target='_blank'>
               Learn More
             </Button>
           </Box>
@@ -140,7 +140,7 @@ export const Landing: React.FC = () => {
               fontSize: { xs: '1.5rem', md: '2rem' },
             }}
           >
-            Why Choose Secure Drop?
+            Why Choose Flight Deck?
           </Typography>
           <Grid container spacing={4}>
             {features.map((feature, index) => (
@@ -169,11 +169,11 @@ export const Landing: React.FC = () => {
         <Box sx={{ maxWidth: 900, mx: 'auto', textAlign: 'center' }}>
           <LockIcon sx={{ fontSize: 56, mb: 2 }} />
           <Typography variant="h5" sx={{ fontWeight: 600, mb: 3 }}>
-            Your Security is Our Priority
+            Your Data's Security is Our Priority
           </Typography>
           <Typography variant="body1" sx={{ mb: 4, lineHeight: 1.7, fontSize: { xs: '0.95rem', md: '1rem' } }}>
-            PigeonHole uses GPG client-side encryption to ensure your files are secure before they leave your device. Your private keys stay
-            only in your browser, where no other app can access them. You have complete control over your data.
+            PigeonHole uses secure client-side GPG encryption to ensure your files are fully encrypted before they leave your device. Your private keys stay
+            only in your browser, where no other app can access them. <br/><br/>You have complete control over your data.
           </Typography>
           <LoginButton variant="outlined" size="large">
             Start Encrypting Now
@@ -185,7 +185,7 @@ export const Landing: React.FC = () => {
       <Box sx={{ width: '100%', bgcolor: 'background.paper', borderTop: '1px solid', borderColor: 'divider', py: 3, px: { xs: 2, sm: 4, md: 6 } }}>
         <Box sx={{ maxWidth: 1400, mx: 'auto', textAlign: 'center' }}>
           <Typography variant="body2" color="text.secondary">
-            © 2026 PigeonHole. Secure file sharing with end-to-end encryption.
+            © 2026 PigeonHole.
           </Typography>
         </Box>
       </Box>

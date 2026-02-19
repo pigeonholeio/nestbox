@@ -75,7 +75,7 @@ export const Header: React.FC<HeaderProps> = ({
                 whiteSpace: 'nowrap',
               }}
             >
-              PigeonHole [Beta]
+              [Beta] Flight Deck
             </Typography>
           </Box>
         </Box>

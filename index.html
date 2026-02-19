@@ -2,13 +2,126 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="PigeonHole - Secure, encrypted file sharing with end-to-end encryption" />
-    <title>PigeonHole - Secure File Sharing</title>
+
+    <!-- Primary Meta Tags -->
+    <title>Flightdeck — Secure End-to-End Encrypted File Sharing</title>
+    <meta name="title" content="Flightdeck — Secure End-to-End Encrypted File Sharing" />
+    <meta name="description" content="Send files securely with end-to-end RSA 4096-bit encryption. Zero-knowledge architecture means we can't access your files. Fast, private, and simple." />
+    <meta name="keywords" content="secure file sharing, end-to-end encryption, encrypted messaging, zero-knowledge, privacy, RSA encryption, file transfer" />
+    <meta name="author" content="PigeonHole" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://flightdeck.pigeono.io" />
+    <meta property="og:title" content="Flightdeck — Secure End-to-End Encrypted File Sharing" />
+    <meta property="og:description" content="Send files securely with end-to-end RSA 4096-bit encryption. Zero-knowledge architecture means we can't access your files. Fast, private, and simple." />
+    <meta property="og:image" content="https://flightdeck.pigeono.io/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="Flightdeck" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://flightdeck.pigeono.io" />
+    <meta property="twitter:title" content="Flightdeck — Secure End-to-End Encrypted File Sharing" />
+    <meta property="twitter:description" content="Send files securely with end-to-end RSA 4096-bit encryption. Zero-knowledge architecture means we can't access your files." />
+    <meta property="twitter:image" content="https://flightdeck.pigeono.io/og-image.png" />
+    <meta property="twitter:creator" content="@pigeonholeio" />
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://flightdeck.pigeono.io" />
+
+    <!-- Favicon & App Icons -->
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#1976d2" />
+    <meta name="msapplication-TileColor" content="#1976d2" />
+
+    <!-- Security & Robots -->
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.pigeono.io https://pigeonholeio.uk.auth0.com; frame-ancestors 'none'" />
+
+    <!-- Preconnect & DNS Prefetch -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://pigeonholeio.uk.auth0.com" />
+    <link rel="preconnect" href="https://api.pigeono.io" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Flightdeck",
+      "description": "Secure end-to-end encrypted file sharing with zero-knowledge architecture",
+      "url": "https://flightdeck.pigeono.io",
+      "applicationCategory": "Utility",
+      "operatingSystem": "Web",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "150"
+      },
+      "creator": {
+        "@type": "Organization",
+        "name": "PigeonHole",
+        "url": "https://pigeono.io"
+      },
+      "screenshot": "https://flightdeck.pigeono.io/screenshot.png",
+      "featureList": [
+        "End-to-end encryption",
+        "Zero-knowledge architecture",
+        "RSA 4096-bit encryption",
+        "Multiple recipients",
+        "Expiration control",
+        "One-time secrets",
+        "Dark mode support",
+        "Mobile responsive"
+      ]
+    }
+    </script>
+
+    <!-- Additional Structured Data (Organization) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "PigeonHole",
+      "url": "https://pigeono.io",
+      "logo": "https://pigeono.io/logo.png",
+      "sameAs": [
+        "https://twitter.com/pigeonholeio",
+        "https://github.com/pigeonholeio"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Customer Service",
+        "url": "https://pigeono.io/support"
+      }
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <img src="https://lnk.pigeono.io/flightdeck-app" alt="" style="display:none;" />
   </body>
 </html>

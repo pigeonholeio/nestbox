@@ -185,7 +185,7 @@ export const MyKeys: React.FC = () => {
               disabled={isLoading || isRegenerating}
               size="small"
             >
-              Regenerate Keys
+              Regenerate Browser Key
             </Button>
             <Button
               variant="outlined"
@@ -260,7 +260,7 @@ export const MyKeys: React.FC = () => {
               </li>
               <li>
                 <Typography variant="body2" paragraph>
-                  Users will need your new public key to send you secrets
+                  Don't worry, your new public key will be automatically pushed to PigeonHole
                 </Typography>
               </li>
             </Box>
@@ -290,7 +290,7 @@ export const MyKeys: React.FC = () => {
                   Regenerating...
                 </>
               ) : (
-                'Regenerate Keys'
+                'Regenerate Browser Key'
               )}
             </Button>
           </DialogActions>

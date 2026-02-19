@@ -10,7 +10,6 @@ import {
   Box,
   useMediaQuery,
   useTheme,
-  Toolbar,
   Typography,
   Link,
   Divider,

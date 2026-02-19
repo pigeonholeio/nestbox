@@ -89,7 +89,7 @@ export const SendSecret: React.FC = () => {
   const getExpirationDate = (): string | undefined => {
     if (expiration === 'never') return undefined;
 
-    const hours = EXPIRATION_PRESETS[expiration].hours;
+    const hours = EXPIRATION_PRESETS[expiration as Exclude<typeof expiration, 'never'>].hours;
     if (!hours) return undefined;
 
     const expirationDate = new Date();
@@ -126,12 +126,16 @@ export const SendSecret: React.FC = () => {
       // Step 1: Encrypt files
       const encryptedData = await encryptFiles(files, users);
 
+      // Calculate payload size for quota validation
+      const payloadSize = encryptedData.length;
+
       // Step 2: Create secret envelope
       setUploadProgress({ stage: 'Creating secret...', percent: 0 });
 
       const secretResponse = await createSecret(
         users.map((u) => u.id),
         getReference(),
+        payloadSize,
         {
           ephemeralkeys: recipients.some((r) => r.isTransient),
           onetime,
