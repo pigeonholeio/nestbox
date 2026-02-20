@@ -104,7 +104,7 @@ export const Landing: React.FC = () => {
               color: 'primary.main',
             }}
           >
-            Flight Deck
+            Nest Box
           </Typography>
           <Typography
             variant="h6"
@@ -140,7 +140,7 @@ export const Landing: React.FC = () => {
               fontSize: { xs: '1.5rem', md: '2rem' },
             }}
           >
-            Why Choose Flight Deck?
+            Why Choose Nest Box?
           </Typography>
           <Grid container spacing={4}>
             {features.map((feature, index) => (

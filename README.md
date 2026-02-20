@@ -1,7 +1,7 @@
 # 🐦 Flightdeck — PigeonHole Web UI
 
 
-## 🌟 Why Flight Deck & PigeonHole?
+## 🌟 Why Nest Box & PigeonHole?
 
 People wanted a web-based app but sharing secrets shouldn't be scary.    
 With Flightdeck, your files are encrypted on *your* device, with your keys, before they ever leave. No servers see them. No logs store them. No third parties have access.

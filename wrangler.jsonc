@@ -1,6 +1,6 @@
 // Wrangler configuration for Cloudflare Pages
 {
-  "name": "flightdeck",
+  "name": "nestbox",
   "type": "javascript",
   "main": "src/main.tsx",
   "compatibility_date": "2024-12-16",

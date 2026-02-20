@@ -75,7 +75,7 @@ export const Header: React.FC<HeaderProps> = ({
                 whiteSpace: 'nowrap',
               }}
             >
-              [Beta] Flight Deck
+              [Beta] Nest Box
             </Typography>
           </Box>
         </Box>
