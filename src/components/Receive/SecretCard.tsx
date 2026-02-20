@@ -231,7 +231,7 @@ export const SecretCard: React.FC<SecretCardProps> = ({
               color="primary"
               sx={{ py: { xs: 1, sm: 1.5 }, fontSize: { xs: '0.875rem', sm: '1rem' } }}
             >
-              {isDownloading ? 'Downloading...' : 'Retrieve from Vault'}
+              {isDownloading ? 'Downloading...' : 'Open Securely'}
             </Button>
           )}
         </Box>
