@@ -20,6 +20,7 @@ export function useConfirmDialog() {
     message: '',
     onConfirm: () => {},
   });
+  
 
   const showConfirm = (options: {
     title: string;
