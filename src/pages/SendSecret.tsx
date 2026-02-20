@@ -184,7 +184,7 @@ export const SendSecret: React.FC = () => {
 
     try {
       const encryptedData = await downloadSecret(secretId);
-      const files = await decryptData(encryptedData, user.email);
+      const files = await decryptData(encryptedData);
       // Files would be displayed in a modal in a real scenario
       console.log('Downloaded files:', files);
     } catch (err) {

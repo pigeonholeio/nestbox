@@ -18,7 +18,8 @@ import { SearchSecretModal } from '@/components/Receive/SearchSecretModal';
 import { FilePreviewList } from '@/components/Receive/FilePreviewList';
 import { DecryptionProgressIndicator } from '@/components/Receive/DecryptionProgressIndicator';
 import { SendSecretModal } from '@/components/Send/SendSecretModal';
-import { ConfirmDialog, useConfirmDialog } from '@/components/Common/ConfirmDialog';
+import { ConfirmDialog } from '@/components/Common/ConfirmDialog';
+import { useConfirmDialog } from '@/hooks/useConfirmDialog';
 import { usePigeonHoleAuth } from '@/hooks/usePigeonHoleAuth';
 import { useKeyManagement } from '@/hooks/useKeyManagement';
 import { useSecrets } from '@/hooks/useSecrets';
@@ -84,7 +85,7 @@ export const ReceiveSecrets: React.FC = () => {
       // Step 2: Decrypt data
       setDownloadProgress({ stage: 'Decrypting...', percent: 0 });
 
-      const files = await decryptData(encryptedData, user.email);
+      const files = await decryptData(encryptedData);
 
       setDownloadProgress({ stage: 'Complete!', percent: 100 });
       setDecryptedFiles(files);

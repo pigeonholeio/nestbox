@@ -49,7 +49,7 @@ export const FilePreviewList: React.FC<FilePreviewListProps> = ({
   const handleDownloadAll = async () => {
     setIsDownloadingAll(true);
     try {
-      await downloadAllAsZip(files, 'pigeonhole-files.zip');
+      await downloadAllAsZip(files);
       files.forEach((file) => {
         setDownloadedFiles((prev) => new Set(prev).add(file.name));
       });

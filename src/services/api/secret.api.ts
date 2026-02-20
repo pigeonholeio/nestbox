@@ -35,23 +35,31 @@ export async function createSecret(
     return response.data;
   } catch (error: unknown) {
     // Handle quota exceeded errors with detailed messages
-    const err = error as Record<string, unknown>;
-    if (err.response?.status === 429 || err.response?.status === 413) {
-      const quotaErr = (err.response as Record<string, unknown>).data as Record<string, unknown>;
-      if (quotaErr?.quota_type) {
-        let errorMessage = quotaErr.message || 'Quota exceeded';
-        if (quotaErr.quota_type === 'secrets_count') {
-          errorMessage = `Secret quota exceeded: ${quotaErr.current_usage}/${quotaErr.limit} secrets. Delete a secret to send more.`;
-        } else if (quotaErr.quota_type === 'total_bytes') {
-          const currentMB = (quotaErr.current_usage / (1024 * 1024)).toFixed(1);
-          const limitMB = (quotaErr.limit / (1024 * 1024)).toFixed(1);
-          errorMessage = `Total data quota exceeded: ${currentMB}MB / ${limitMB}MB used. Try a smaller file.`;
-        } else if (quotaErr.quota_type === 'file_size') {
-          const fileMB = (quotaErr.requested / (1024 * 1024)).toFixed(1);
-          const limitMB = (quotaErr.limit / (1024 * 1024)).toFixed(1);
-          errorMessage = `File too large: ${fileMB}MB exceeds maximum of ${limitMB}MB.`;
+    if (axios.isAxiosError(error) && error.response) {
+      const status = error.response.status;
+      if (status === 429 || status === 413) {
+        const quotaErr = error.response.data as Record<string, unknown>;
+        if (quotaErr?.quota_type) {
+          let errorMessage = (quotaErr.message as string) || 'Quota exceeded';
+          if (quotaErr.quota_type === 'secrets_count') {
+            const currentUsage = quotaErr.current_usage as number;
+            const limit = quotaErr.limit as number;
+            errorMessage = `Secret quota exceeded: ${currentUsage}/${limit} secrets. Delete a secret to send more.`;
+          } else if (quotaErr.quota_type === 'total_bytes') {
+            const currentUsage = quotaErr.current_usage as number;
+            const limit = quotaErr.limit as number;
+            const currentMB = (currentUsage / (1024 * 1024)).toFixed(1);
+            const limitMB = (limit / (1024 * 1024)).toFixed(1);
+            errorMessage = `Total data quota exceeded: ${currentMB}MB / ${limitMB}MB used. Try a smaller file.`;
+          } else if (quotaErr.quota_type === 'file_size') {
+            const requested = quotaErr.requested as number;
+            const limit = quotaErr.limit as number;
+            const fileMB = (requested / (1024 * 1024)).toFixed(1);
+            const limitMB = (limit / (1024 * 1024)).toFixed(1);
+            errorMessage = `File too large: ${fileMB}MB exceeds maximum of ${limitMB}MB.`;
+          }
+          throw new Error(errorMessage);
         }
-        throw new Error(errorMessage);
       }
     }
     throw error;

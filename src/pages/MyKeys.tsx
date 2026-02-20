@@ -16,7 +16,8 @@ import WarningIcon from '@mui/icons-material/Warning';
 import { AppLayout } from '@/components/Layout/AppLayout';
 import { KeysList } from '@/components/Keys/KeysList';
 import { SearchSecretModal } from '@/components/Receive/SearchSecretModal';
-import { ConfirmDialog, useConfirmDialog } from '@/components/Common/ConfirmDialog';
+import { ConfirmDialog } from '@/components/Common/ConfirmDialog';
+import { useConfirmDialog } from '@/hooks/useConfirmDialog';
 import { usePigeonHoleAuth } from '@/hooks/usePigeonHoleAuth';
 import { useKeyManagement } from '@/hooks/useKeyManagement';
 import { useSecrets } from '@/hooks/useSecrets';
@@ -155,7 +156,7 @@ export const MyKeys: React.FC = () => {
     try {
       const encryptedData = await downloadSecret(secretId);
       if (auth0User?.email) {
-        const files = await decryptData(encryptedData, auth0User.email);
+        const files = await decryptData(encryptedData);
         console.log('Downloaded files:', files);
       }
     } catch (err) {
