@@ -38,6 +38,15 @@ export const SecretsList: React.FC<SecretsListProps> = ({
   const { currentKey } = useKeyStore();
   const [filter, setFilter] = React.useState<FilterType>('decryptable');
   const [searchQuery, setSearchQuery] = React.useState('');
+  const [now, setNow] = React.useState(() => Date.now());
+
+  // Update now on interval for expiring filter
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setNow(Date.now());
+    }, 60000); // Update every minute
+    return () => clearInterval(interval);
+  }, []);
 
   const filteredSecrets = React.useMemo(() => {
     let filtered = [...secrets];
@@ -54,7 +63,7 @@ export const SecretsList: React.FC<SecretsListProps> = ({
         if (!s.expiration) return false;
         const expirationDate = new Date(s.expiration);
         const hoursUntilExpiration =
-          (expirationDate.getTime() - Date.now()) / (1000 * 60 * 60);
+          (expirationDate.getTime() - now) / (1000 * 60 * 60);
         return hoursUntilExpiration < 24 && hoursUntilExpiration > 0;
       });
     }
@@ -77,7 +86,7 @@ export const SecretsList: React.FC<SecretsListProps> = ({
     });
 
     return filtered;
-  }, [secrets, filter, searchQuery, currentKey?.fingerprint]);
+  }, [secrets, filter, searchQuery, currentKey?.fingerprint, now]);
 
   if (secrets.length === 0) {
     return (

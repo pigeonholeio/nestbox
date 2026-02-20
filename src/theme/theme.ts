@@ -18,7 +18,7 @@ export const lightTheme: Theme = createTheme({
       700: '#303F9F',
       800: '#283593',
       900: '#1A237E',
-    } as any,
+    } as Record<string, string>,
     secondary: {
       main: '#536DFE',      // Indigo A200
       light: '#8C9EFF',     // Indigo A100
@@ -27,7 +27,7 @@ export const lightTheme: Theme = createTheme({
       A200: '#536DFE',
       A400: '#3D5AFE',
       A700: '#304FFE',
-    } as any,
+    } as Record<string, string>,
     background: {
       default: '#FFFFFF',
       paper: '#F5F5F5',

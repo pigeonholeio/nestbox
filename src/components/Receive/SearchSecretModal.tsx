@@ -72,8 +72,8 @@ export const SearchSecretModal: React.FC<SearchSecretModalProps> = ({
         )}
 
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, maxHeight: { xs: 300, sm: 400 }, overflowY: 'auto' }}>
-          {filteredSecrets.map((secret) => (
-            <Box key={secret.reference || Math.random()}>
+          {filteredSecrets.map((secret, index) => (
+            <Box key={secret.id || index}>
               <SecretCard
                 secret={secret}
                 onDownload={onDownload}

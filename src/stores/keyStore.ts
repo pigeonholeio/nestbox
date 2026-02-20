@@ -44,7 +44,7 @@ export const useKeyStore = create<KeyState>((set) => ({
   },
 
   // Generate new key and upload to server
-  generateAndStoreKey: async (userName, userEmail, _apiToken) => {
+  generateAndStoreKey: async (userName, userEmail) => {
     set({ isGenerating: true, generationProgress: 0, error: null });
 
     try {

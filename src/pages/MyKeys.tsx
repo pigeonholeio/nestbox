@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Typography,
@@ -46,14 +46,7 @@ export const MyKeys: React.FC = () => {
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
 
-  // Load user ID and keys on mount
-  useEffect(() => {
-    if (isAuthenticated) {
-      initializeUser();
-    }
-  }, [isAuthenticated]);
-
-  const initializeUser = async () => {
+  const initializeUser = useCallback(async () => {
     try {
       const currentUser = await getCurrentUser();
       setUserId(currentUser.user.id);
@@ -62,7 +55,14 @@ export const MyKeys: React.FC = () => {
       console.error('Failed to load user:', err);
       setError(err instanceof Error ? err.message : 'Failed to load user');
     }
-  };
+  }, []);
+
+  // Load user ID and keys on mount
+  useEffect(() => {
+    if (isAuthenticated) {
+      initializeUser();
+    }
+  }, [isAuthenticated, initializeUser]);
 
   const loadKeys = async () => {
     try {

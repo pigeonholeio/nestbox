@@ -193,7 +193,7 @@ export function downloadFile(file: DecryptedFile): void {
 /**
  * Download all files as a ZIP
  */
-export async function downloadAllAsZip(files: DecryptedFile[], _zipName: string = 'files.zip'): Promise<void> {
+export async function downloadAllAsZip(files: DecryptedFile[]): Promise<void> {
   // For simplicity, we'll download each file individually
   // In a production app, you might want to use a library like JSZip
   for (const file of files) {

@@ -24,7 +24,6 @@ export const Onboarding: React.FC = () => {
   const [showWarning, setShowWarning] = useState(false);
   const [showGenerationModal, setShowGenerationModal] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
-  const [hasShownWarning, setHasShownWarning] = useState(false);
 
   // Auto-navigate to /receive when keys are synced by usePigeonHoleAuth
   useEffect(() => {
@@ -34,12 +33,13 @@ export const Onboarding: React.FC = () => {
   }, [isAuthenticated, authLoading, hasKey, navigate]);
 
   // Show warning dialog when user first logs in without local keys
+  // This is a deliberate pattern for showing onboarding warnings on first login
   useEffect(() => {
-    if (isAuthenticated && !authLoading && !hasKey && !hasShownWarning) {
+    if (isAuthenticated && !authLoading && !hasKey && !showWarning) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setShowWarning(true);
-      setHasShownWarning(true);
     }
-  }, [isAuthenticated, authLoading, hasKey, hasShownWarning]);
+  }, [isAuthenticated, authLoading, hasKey, showWarning]);
 
   // Handle warning acceptance
   const handleAcceptWarning = async () => {

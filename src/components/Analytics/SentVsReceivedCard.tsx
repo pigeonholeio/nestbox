@@ -58,7 +58,7 @@ export const SentVsReceivedCard: React.FC<SentVsReceivedCardProps> = ({ analytic
                     <Cell key={`cell-${index}`} fill={entry.fill} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value: any) => value.toString()} />
+                <Tooltip formatter={(value: number) => value.toString()} />
               </PieChart>
             </ResponsiveContainer>
           ) : (

@@ -71,8 +71,7 @@ export function useCrypto() {
    * Decrypt encrypted data
    */
   const decryptData = async (
-    encryptedData: Uint8Array,
-    _userEmail: string
+    encryptedData: Uint8Array
   ): Promise<DecryptedFile[]> => {
     if (!currentKey) {
       throw new Error('No encryption key available');

@@ -1,7 +1,7 @@
 # Makefile for PigeonHole Web UI
 
 # Variables
-APP_NAME = pigeonhole-web
+APP_NAME = flightdeck
 VERSION ?= latest
 DOCKER_IMAGE = $(APP_NAME):$(VERSION)
 DOCKER_REGISTRY ?= ghcr.io/pigeonhole

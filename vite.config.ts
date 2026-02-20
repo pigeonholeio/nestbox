@@ -12,7 +12,7 @@ const version = packageJson.version
 let commitHash = 'unknown'
 try {
   commitHash = execSync('git rev-parse --short HEAD', { encoding: 'utf-8' }).trim()
-} catch (error) {
+} catch {
   // Git command failed, use version fallback
   commitHash = version
 }

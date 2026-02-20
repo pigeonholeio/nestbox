@@ -8,8 +8,8 @@ services:
       args:
         VITE_AUTH0_CLIENT_ID: ${VITE_AUTH0_CLIENT_ID:-your_auth0_client_id_here}
         VITE_API_BASE_URL: ${VITE_API_BASE_URL:-https://api.pigeonhole.io/v1}
-    image: pigeonhole-web:latest
-    container_name: pigeonhole-web
+    image: flightdeck:latest
+    container_name: flightdeck
     ports:
       - "${PORT:-8080}:80"
     restart: unless-stopped

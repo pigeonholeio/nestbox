@@ -33,10 +33,11 @@ export async function createSecret(
   try {
     const response = await apiClient.post<CreateSecretResponse>('/secret', request);
     return response.data;
-  } catch (error: any) {
+  } catch (error: unknown) {
     // Handle quota exceeded errors with detailed messages
-    if (error.response?.status === 429 || error.response?.status === 413) {
-      const quotaErr = error.response.data;
+    const err = error as Record<string, unknown>;
+    if (err.response?.status === 429 || err.response?.status === 413) {
+      const quotaErr = (err.response as Record<string, unknown>).data as Record<string, unknown>;
       if (quotaErr?.quota_type) {
         let errorMessage = quotaErr.message || 'Quota exceeded';
         if (quotaErr.quota_type === 'secrets_count') {
@@ -124,7 +125,7 @@ export async function getSecretsByReference(reference: string): Promise<Secret[]
  * Get secret details with download URL
  */
 export async function getSecretDetails(secretId: string): Promise<SecretDetailResponse> {
-  const response = await apiClient.get<any>(`/secret/${secretId}`);
+  const response = await apiClient.get<Record<string, unknown>>(`/secret/${secretId}`);
   // Map API response to our interface - the API uses snake_case
   return {
     ...response.data,
