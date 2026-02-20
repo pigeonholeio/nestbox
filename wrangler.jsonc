@@ -1,0 +1,26 @@
+// Wrangler configuration for Cloudflare Pages
+{
+  "name": "flightdeck",
+  "type": "javascript",
+  "main": "src/main.tsx",
+  "compatibility_date": "2024-12-16",
+
+  // Pages-specific configuration
+  "pages_build_caching": true,
+
+  // Build configuration
+  "build": {
+    "command": "npm run build",
+    "cwd": "./",
+    "root": "dist"
+  },
+
+  // Environment variables (optional - can be set in Cloudflare dashboard)
+  "env": {
+    "production": {
+      "vars": {
+        // Add your production environment variables here if needed
+      }
+    }
+  }
+}
