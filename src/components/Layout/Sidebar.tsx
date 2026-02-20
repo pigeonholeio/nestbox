@@ -45,8 +45,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ variant }) => {
   const drawerVariant = variant || (isMobile ? 'temporary' : 'permanent');
 
   const menuItems = [
-    { text: 'My PigeonHole', icon: <InboxIcon />, path: '/receive' },
-    { text: 'My Keys', icon: <VpnKeyIcon />, path: '/keys' },
+    { text: 'Vault', icon: <InboxIcon />, path: '/vault' },
+    { text: 'Keys', icon: <VpnKeyIcon />, path: '/keys' },
   ];
 
   const handleNavigation = (path: string) => {

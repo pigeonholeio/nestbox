@@ -24,7 +24,7 @@ export const Landing: React.FC = () => {
 
   React.useEffect(() => {
     if (isAuthenticated) {
-      navigate('/receive');
+      navigate('/vault');
     }
   }, [isAuthenticated, navigate]);
 

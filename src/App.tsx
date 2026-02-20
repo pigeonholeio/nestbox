@@ -54,7 +54,7 @@ function App() {
                 }
               />
               <Route
-                path="/receive"
+                path="/vault"
                 element={
                   <ProtectedRoute>
                     <ReceiveSecrets />
@@ -71,7 +71,7 @@ function App() {
               />
 
               {/* Catch-all redirect */}
-              <Route path="*" element={<Navigate to="/receive" replace />} />
+              <Route path="*" element={<Navigate to="/vault" replace />} />
             </Routes>
           </BrowserRouter>
         </ThemeProvider>

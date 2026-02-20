@@ -25,7 +25,7 @@ export const AuthCallback: React.FC = () => {
       // If we already have a token, skip
       if (auth0Token) {
         const userHasKey = hasStoredKey(user.email || '');
-        navigate(userHasKey ? '/receive' : '/onboarding', { replace: true });
+        navigate(userHasKey ? '/vault' : '/onboarding', { replace: true });
         return;
       }
 
@@ -51,7 +51,7 @@ export const AuthCallback: React.FC = () => {
         const userHasKey = hasStoredKey(user.email || '');
 
         // Navigate to appropriate page
-        navigate(userHasKey ? '/receive' : '/onboarding', { replace: true });
+        navigate(userHasKey ? '/vault' : '/onboarding', { replace: true });
       } catch (err) {
         console.error('Authentication failed:', err);
         setError(

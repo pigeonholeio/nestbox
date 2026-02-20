@@ -28,7 +28,7 @@ export const Onboarding: React.FC = () => {
   // Auto-navigate to /receive when keys are synced by usePigeonHoleAuth
   useEffect(() => {
     if (isAuthenticated && !authLoading && hasKey) {
-      navigate('/receive', { replace: true });
+      navigate('/vault', { replace: true });
     }
   }, [isAuthenticated, authLoading, hasKey, navigate]);
 
@@ -47,7 +47,7 @@ export const Onboarding: React.FC = () => {
 
     // If user already has a key, navigate to receive
     if (hasKey) {
-      navigate('/receive', { replace: true });
+      navigate('/vault', { replace: true });
       return;
     }
 
@@ -60,7 +60,7 @@ export const Onboarding: React.FC = () => {
 
       // Navigate to receive after a brief delay
       setTimeout(() => {
-        navigate('/receive', { replace: true });
+        navigate('/vault', { replace: true });
       }, 2000);
     } catch (error) {
       console.error('Key generation failed:', error);
@@ -84,7 +84,7 @@ export const Onboarding: React.FC = () => {
       setIsComplete(true);
 
       setTimeout(() => {
-        navigate('/receive', { replace: true });
+        navigate('/vault', { replace: true });
       }, 2000);
     } catch (error) {
       console.error('Key generation retry failed:', error);
