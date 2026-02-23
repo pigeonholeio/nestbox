@@ -13,6 +13,7 @@ interface AppLayoutProps {
   showSearchBar?: boolean;
   onSearchClick?: () => void;
   onSendClick?: () => void;
+  onInviteClick?: () => void;
 }
 
 /**
@@ -26,6 +27,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
   showSearchBar,
   onSearchClick,
   onSendClick,
+  onInviteClick,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -49,6 +51,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
           showSearchBar={showSearchBar}
           onSearchClick={onSearchClick}
           onSendClick={onSendClick}
+          onInviteClick={onInviteClick}
         />
       )}
 

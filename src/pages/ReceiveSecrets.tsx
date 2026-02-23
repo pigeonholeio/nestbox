@@ -18,6 +18,7 @@ import { SearchSecretModal } from '@/components/Receive/SearchSecretModal';
 import { FilePreviewList } from '@/components/Receive/FilePreviewList';
 import { DecryptionProgressIndicator } from '@/components/Receive/DecryptionProgressIndicator';
 import { SendSecretModal } from '@/components/Send/SendSecretModal';
+import { InviteModal } from '@/components/Invite/InviteModal';
 import { ConfirmDialog } from '@/components/Common/ConfirmDialog';
 import { useConfirmDialog } from '@/hooks/useConfirmDialog';
 import { usePigeonHoleAuth } from '@/hooks/usePigeonHoleAuth';
@@ -47,6 +48,7 @@ export const ReceiveSecrets: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [showSendModal, setShowSendModal] = useState(false);
+  const [showInviteModal, setShowInviteModal] = useState(false);
 
   // Check for key on mount
   useEffect(() => {
@@ -149,11 +151,12 @@ export const ReceiveSecrets: React.FC = () => {
       showSearchBar
       onSearchClick={() => setShowSearchModal(true)}
       onSendClick={() => setShowSendModal(true)}
+      onInviteClick={() => setShowInviteModal(true)}
     >
       <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', p: { xs: 2, sm: 3, md: 4 } }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
           <Typography variant="h4" fontWeight={600}>
-            Inbox
+            My Vault
           </Typography>
           <Button
             variant="outlined"
@@ -235,6 +238,12 @@ export const ReceiveSecrets: React.FC = () => {
         <SendSecretModal
           open={showSendModal}
           onClose={() => setShowSendModal(false)}
+        />
+
+        {/* Invite Modal */}
+        <InviteModal
+          open={showInviteModal}
+          onClose={() => setShowInviteModal(false)}
         />
 
         {/* Confirm Dialog */}

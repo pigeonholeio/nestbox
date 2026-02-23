@@ -3,6 +3,7 @@ import { AppBar, Toolbar, Typography, Box, IconButton, TextField, InputAdornment
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import SendIcon from '@mui/icons-material/Send';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { ThemeToggle } from './ThemeToggle';
 import { LogoutButton } from '@/components/Auth/LogoutButton';
 import { useAuthStore } from '@/stores/authStore';
@@ -14,6 +15,7 @@ interface HeaderProps {
   showSearchBar?: boolean;
   onSearchClick?: () => void;
   onSendClick?: () => void;
+  onInviteClick?: () => void;
 }
 
 /**
@@ -24,6 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
   onMenuClick,
   onSearchClick,
   onSendClick,
+  onInviteClick,
 }) => {
   const auth0User = useAuthStore((state) => state.auth0User);
 
@@ -108,27 +111,51 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Right: Action Buttons */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0, flexShrink: 0 }}>
           {auth0User && (
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<SendIcon />}
-              onClick={onSendClick}
-              size="small"
-              sx={{ display: { xs: 'none', sm: 'flex' } }}
-            >
-              Send Secret
-            </Button>
+            <>
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<SendIcon />}
+                onClick={onSendClick}
+                size="small"
+                sx={{ display: { xs: 'none', sm: 'flex' } }}
+              >
+                Send Secret
+              </Button>
+
+              <Button
+                variant="outlined"
+                color="primary"
+                startIcon={<PersonAddIcon />}
+                onClick={onInviteClick}
+                size="small"
+                sx={{ display: { xs: 'none', sm: 'flex' } }}
+              >
+                Invite
+              </Button>
+            </>
           )}
 
           {auth0User && (
-            <IconButton
-              color="inherit"
-              onClick={onSendClick}
-              sx={{ display: { xs: 'flex', sm: 'none' } }}
-              title="Send Secret"
-            >
-              <SendIcon />
-            </IconButton>
+            <>
+              <IconButton
+                color="inherit"
+                onClick={onSendClick}
+                sx={{ display: { xs: 'flex', sm: 'none' } }}
+                title="Send Secret"
+              >
+                <SendIcon />
+              </IconButton>
+
+              <IconButton
+                color="inherit"
+                onClick={onInviteClick}
+                sx={{ display: { xs: 'flex', sm: 'none' } }}
+                title="Invite Recipients"
+              >
+                <PersonAddIcon />
+              </IconButton>
+            </>
           )}
 
           <ThemeToggle />

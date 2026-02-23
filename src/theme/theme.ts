@@ -5,28 +5,28 @@ export const lightTheme: Theme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#3F51B5',      // Indigo 500
-      light: '#5C6BC0',     // Indigo 400
-      dark: '#303F9F',      // Indigo 700
-      50: '#E8EAF6',
-      100: '#C5CAE9',
-      200: '#9FA8DA',
-      300: '#7986CB',
-      400: '#5C6BC0',
-      500: '#3F51B5',
-      600: '#3949AB',
-      700: '#303F9F',
-      800: '#283593',
-      900: '#1A237E',
+      main: '#8412c0',      // PigeonHole Purple
+      light: '#9d3dd4',     // Lighter purple
+      dark: '#6a0d9f',      // Darker purple
+      50: '#f5e6ff',
+      100: '#e6ccff',
+      200: '#cc99ff',
+      300: '#b366ff',
+      400: '#9d3dd4',
+      500: '#8412c0',
+      600: '#7a0fb8',
+      700: '#6a0d9f',
+      800: '#5a0a86',
+      900: '#3d056d',
     } as Record<string, string>,
     secondary: {
-      main: '#536DFE',      // Indigo A200
-      light: '#8C9EFF',     // Indigo A100
-      dark: '#3D5AFE',      // Indigo A400
-      A100: '#8C9EFF',
-      A200: '#536DFE',
-      A400: '#3D5AFE',
-      A700: '#304FFE',
+      main: '#9d3dd4',      // Lighter purple
+      light: '#b366ff',     // Even lighter
+      dark: '#6a0d9f',      // Darker purple
+      A100: '#b366ff',
+      A200: '#9d3dd4',
+      A400: '#6a0d9f',
+      A700: '#5a0a86',
     } as Record<string, string>,
     background: {
       default: '#FFFFFF',
@@ -111,14 +111,14 @@ export const darkTheme: Theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#536DFE',      // Indigo A200
-      light: '#8C9EFF',     // Indigo A100
-      dark: '#3D5AFE',      // Indigo A400
+      main: '#b366ff',      // Brighter purple for dark mode
+      light: '#cc99ff',     // Even brighter for light variants
+      dark: '#8412c0',      // Original purple for dark variants
     },
     secondary: {
-      main: '#536DFE',
-      light: '#8C9EFF',
-      dark: '#3D5AFE',
+      main: '#b366ff',
+      light: '#cc99ff',
+      dark: '#8412c0',
     },
     background: {
       default: '#121212',

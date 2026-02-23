@@ -8,6 +8,7 @@ import { SecretOptionsPanel } from '@/components/Send/SecretOptionsPanel';
 import { DualProgressIndicator } from '@/components/Send/DualProgressIndicator';
 import { SendSecretButton } from '@/components/Send/SendSecretButton';
 import { SearchSecretModal } from '@/components/Receive/SearchSecretModal';
+import { InviteModal } from '@/components/Invite/InviteModal';
 import { usePigeonHoleAuth } from '@/hooks/usePigeonHoleAuth';
 import { useKeyManagement } from '@/hooks/useKeyManagement';
 import { useCrypto } from '@/hooks/useCrypto';
@@ -45,6 +46,7 @@ export const SendSecret: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
+  const [showInviteModal, setShowInviteModal] = useState(false);
 
   // Check for key on mount
   useEffect(() => {
@@ -199,6 +201,11 @@ export const SendSecret: React.FC = () => {
       showHeader
       showSearchBar={true}
       onSearchClick={() => setShowSearchModal(true)}
+      onSendClick={() => {
+        // Scroll to top to focus on the form
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }}
+      onInviteClick={() => setShowInviteModal(true)}
     >
       <Box>
         <Typography variant="h4" gutterBottom fontWeight={600}>
@@ -270,6 +277,12 @@ export const SendSecret: React.FC = () => {
           onDownload={handleDownload}
           onDelete={deleteSecret}
           downloadingSecretId={null}
+        />
+
+        {/* Invite Modal */}
+        <InviteModal
+          open={showInviteModal}
+          onClose={() => setShowInviteModal(false)}
         />
       </Box>
     </AppLayout>
