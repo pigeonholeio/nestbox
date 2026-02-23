@@ -145,7 +145,7 @@ export const ReceiveSecrets: React.FC = () => {
 
   return (
     <AppLayout
-      title="PigeonHole Secrets"
+      title="Nestbox Secrets"
       showSidebar
       showHeader
       showSearchBar
@@ -155,7 +155,7 @@ export const ReceiveSecrets: React.FC = () => {
     >
       <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', p: { xs: 2, sm: 3, md: 4 } }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography variant="h4" fontWeight={600}>
+          <Typography color="#8412c0" variant="h4" fontWeight={600}>
             My Vault
           </Typography>
           <Button
