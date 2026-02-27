@@ -23,6 +23,7 @@ import { useKeyManagement } from '@/hooks/useKeyManagement';
 import { useSecrets } from '@/hooks/useSecrets';
 import { useCrypto } from '@/hooks/useCrypto';
 import { useAuthStore } from '@/stores/authStore';
+import { useKeyStore } from '@/stores/keyStore';
 import { getCurrentUserKeys, deletePublicKeyForUser, getCurrentUser } from '@/services/api/user.api';
 import { downloadSecret } from '@/services/api/secret.api';
 import type { UserKey } from '@/types/api.types';
@@ -37,6 +38,7 @@ export const MyKeys: React.FC = () => {
   const { secrets, deleteSecret: deleteSecret_api } = useSecrets(true);
   const { decryptData } = useCrypto();
   const { auth0User } = useAuthStore();
+  const { currentKey } = useKeyStore();
 
   const [userId, setUserId] = useState<string | null>(null);
   const [keys, setKeys] = useState<UserKey[]>([]);
@@ -126,26 +128,42 @@ export const MyKeys: React.FC = () => {
     setIsRegenerating(true);
 
     try {
-      // Delete all existing keys remotely
-      if (userId) {
-        for (const key of keys) {
-          try {
-            await deletePublicKeyForUser(userId, key.id);
-          } catch (err) {
-            console.error('Failed to delete key:', key.id, err);
+      // Store the OLD key's thumbprint BEFORE regeneration
+      // (after generateKey(), currentKey will be updated to the NEW key)
+      const oldKeyThumbprint = currentKey?.thumbprint;
+
+      // Generate new key (this updates currentKey in the store to the NEW key)
+      await generateKey();
+
+      // After generating new key, delete any old keys from remote
+      if (userId && oldKeyThumbprint) {
+        // Reload to get the updated list (should now include the new key)
+        const response = await getCurrentUserKeys();
+        if (response && response.keys) {
+          const updatedKeys = response.keys;
+
+          // Find and delete any keys with the old thumbprint
+          const oldKeysToDelete = updatedKeys.filter(k => k.thumbprint === oldKeyThumbprint);
+
+          for (const oldKey of oldKeysToDelete) {
+            try {
+              await deletePublicKeyForUser(userId, oldKey.id);
+              console.log('Deleted old key:', oldKey.id, 'with thumbprint:', oldKeyThumbprint);
+            } catch (err) {
+              console.error('Failed to delete old key:', oldKey.id, err);
+            }
           }
+
+          setKeys(updatedKeys);
         }
       }
-
-      // Generate new key
-      await generateKey();
-      // Reload keys after successful generation
-      await loadKeys();
     } catch (err) {
       console.error('Key regeneration failed:', err);
       setError(err instanceof Error ? err.message : 'Failed to regenerate keys');
     } finally {
       setIsRegenerating(false);
+      // Final reload to ensure we have the latest keys
+      await loadKeys();
     }
   };
 

@@ -169,9 +169,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ variant }) => {
       }}
       ModalProps={{
         keepMounted: true, // Better mobile performance
-        sx: {
-          '& .MuiBackdrop-root': {
-            position: 'fixed',
+        BackdropProps: {
+          sx: {
+            display: 'none', // Temporary drawer doesn't need a backdrop
           },
         },
       }}
