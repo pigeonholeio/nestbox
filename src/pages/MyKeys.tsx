@@ -26,6 +26,7 @@ import { useAuthStore } from '@/stores/authStore';
 import { useKeyStore } from '@/stores/keyStore';
 import { getCurrentUserKeys, deletePublicKeyForUser, getCurrentUser } from '@/services/api/user.api';
 import { downloadSecret } from '@/services/api/secret.api';
+import { deleteStoredKey } from '@/services/crypto/keyStorage';
 import type { UserKey } from '@/types/api.types';
 
 /**
@@ -97,9 +98,20 @@ export const MyKeys: React.FC = () => {
       onConfirm: async () => {
         try {
           setIsDeletingKeyId(keyId);
+
+          // Get the key being deleted to check its thumbprint
+          const keyToDelete = keys.find((k) => k.id === keyId);
+
           if (userId) {
             await deletePublicKeyForUser(userId, keyId);
           }
+
+          // If the deleted key matches the current local key, delete it from browser storage
+          if (keyToDelete && currentKey && keyToDelete.thumbprint === currentKey.thumbprint) {
+            deleteStoredKey(currentKey.email);
+            console.log('Deleted local key for user:', currentKey.email);
+          }
+
           setKeys(keys.filter((k) => k.id !== keyId));
         } catch (err) {
           console.error('Delete failed:', err);

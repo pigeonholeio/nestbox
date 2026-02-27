@@ -144,11 +144,11 @@ export const SecretCard: React.FC<SecretCardProps> = ({
           </Box>
         </Tooltip>
 
-        {secret.size && (
+        {/* {secret.size && ( */}
           <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
             Size: {formatFileSize(secret.size)}
           </Typography>
-        )}
+        {/* )} */}
 
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2 }}>
           {secret.downloaded ? (
