@@ -1,7 +1,7 @@
 # Makefile for PigeonHole Web UI
 
 # Variables
-APP_NAME = flightdeck
+APP_NAME = nestbox
 VERSION ?= latest
 DOCKER_IMAGE = $(APP_NAME):$(VERSION)
 DOCKER_REGISTRY ?= ghcr.io/pigeonhole
@@ -161,22 +161,10 @@ format: ## Format code with prettier (if configured)
 	@echo "$(GREEN)Formatting code...$(NC)"
 	npx prettier --write "src/**/*.{ts,tsx,css,json}" || echo "$(YELLOW)Prettier not configured$(NC)"
 
-##@ Deployment
-
-.PHONY: deploy-netlify
-deploy-netlify: build ## Deploy to Netlify
-	@echo "$(GREEN)Deploying to Netlify...$(NC)"
-	npx netlify deploy --prod --dir=dist
-
-.PHONY: deploy-vercel
-deploy-vercel: build ## Deploy to Vercel
-	@echo "$(GREEN)Deploying to Vercel...$(NC)"
-	npx vercel --prod
-
-.PHONY: deploy-preview
-deploy-preview: build ## Deploy preview to Netlify
-	@echo "$(GREEN)Deploying preview to Netlify...$(NC)"
-	npx netlify deploy --dir=dist
+.PHONY: deploy-cloudflare
+deploy-cloudflare: build ## Deploy to Cloudflare Pages
+	@echo "$(GREEN)Deploying to Cloudflare Pages...$(NC)"
+	npx wrangler pages deploy dist --project-name nestbox
 
 ##@ Utilities
 

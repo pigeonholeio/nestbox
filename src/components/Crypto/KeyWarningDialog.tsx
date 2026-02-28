@@ -137,6 +137,11 @@ export const KeyWarningDialog: React.FC<KeyWarningDialogProps> = ({
             </li>
             <li>
               <Typography variant="body2" paragraph>
+                There is <strong>no private key synchronisation</strong> between the browser and command-line clients
+              </Typography>
+            </li>
+            <li>
+              <Typography variant="body2" paragraph>
                 We <strong>cannot recover</strong> your key if you lose it
               </Typography>
             </li>

@@ -26,7 +26,8 @@ function App() {
         clientId={auth0Config.clientId}
         authorizationParams={auth0Config.authorizationParams}
         useRefreshTokens
-        cacheLocation="localstorage"
+        cacheLocation="memory"
+        useRefreshTokensFallback={false}
       >
         <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
           <CssBaseline />
