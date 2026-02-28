@@ -66,16 +66,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ variant }) => {
                 selected={location.pathname === item.path}
                 onClick={() => handleNavigation(item.path)}
                 sx={{
+                  color: location.pathname === item.path ? 'primary.main' : 'text.secondary',
                   '&.Mui-selected': {
-                    bgcolor: 'primary.main',
-                    color: 'primary.contrastText',
+                    bgcolor: 'rgba(167, 139, 250, 0.08)',
+                    borderLeft: '2px solid',
+                    borderColor: 'primary.main',
+                    paddingLeft: 'calc(16px - 2px)',
                     '&:hover': {
-                      bgcolor: 'primary.dark',
-                    },
-                    '& .MuiListItemIcon-root': {
-                      color: 'primary.contrastText',
+                      bgcolor: 'rgba(167, 139, 250, 0.12)',
                     },
                   },
+                  transition: 'all 0.2s ease',
                 }}
               >
                 <ListItemIcon
@@ -165,6 +166,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ variant }) => {
           height: '100%',
           top: 0,
           position: 'relative',
+          backgroundColor: '#0f1219',
+          borderRight: '1px solid rgba(167, 139, 250, 0.1)',
         },
       }}
       ModalProps={{

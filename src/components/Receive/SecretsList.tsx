@@ -22,6 +22,7 @@ interface SecretsListProps {
   onDownload: (secretId: string) => void;
   onDelete: (secretId: string) => void;
   downloadingSecretId: string | null;
+  deletingIds: Set<string>;
 }
 
 type FilterType = 'all' | 'decryptable' | 'expiring';
@@ -34,6 +35,7 @@ export const SecretsList: React.FC<SecretsListProps> = ({
   onDownload,
   onDelete,
   downloadingSecretId,
+  deletingIds,
 }) => {
   const { currentKey } = useKeyStore();
   const [filter, setFilter] = React.useState<FilterType>('decryptable');
@@ -155,12 +157,22 @@ export const SecretsList: React.FC<SecretsListProps> = ({
           <Grid container spacing={2} sx={{ width: '100%', margin: 0 }}>
             {filteredSecrets.map((secret) => (
               <Grid key={secret.reference} size={{ xs: 12, sm: 6, md: 4 }}>
-                <SecretCard
-                  secret={secret}
-                  onDownload={onDownload}
-                  onDelete={onDelete}
-                  isDownloading={downloadingSecretId === secret.id}
-                />
+                <Box
+                  sx={{
+                    transition: 'opacity 350ms ease-in, transform 350ms ease-in, max-height 380ms ease-in',
+                    opacity: deletingIds.has(secret.reference) ? 0 : 1,
+                    transform: deletingIds.has(secret.reference) ? 'scale(0.97)' : 'scale(1)',
+                    maxHeight: deletingIds.has(secret.reference) ? 0 : '600px',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <SecretCard
+                    secret={secret}
+                    onDownload={onDownload}
+                    onDelete={onDelete}
+                    isDownloading={downloadingSecretId === secret.id}
+                  />
+                </Box>
               </Grid>
             ))}
           </Grid>

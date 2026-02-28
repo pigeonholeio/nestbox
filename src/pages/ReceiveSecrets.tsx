@@ -25,7 +25,8 @@ import { usePigeonHoleAuth } from '@/hooks/usePigeonHoleAuth';
 import { useKeyManagement } from '@/hooks/useKeyManagement';
 import { useSecrets } from '@/hooks/useSecrets';
 import { useCrypto } from '@/hooks/useCrypto';
-import { downloadSecret } from '@/services/api/secret.api';
+import { downloadSecret, deleteSecret as apiDeleteSecret } from '@/services/api/secret.api';
+import { deleteStoredKey } from '@/services/crypto/keyStorage';
 import type { DecryptedFile } from '@/types/secret.types';
 
 /**
@@ -35,12 +36,13 @@ export const ReceiveSecrets: React.FC = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user } = usePigeonHoleAuth();
   const { checkHasKey } = useKeyManagement();
-  const { secrets, isLoading, error: secretsError, deleteSecret, refresh } = useSecrets(true);
+  const { secrets, isLoading, error: secretsError, removeFromState, refresh } = useSecrets(true);
   const { decryptData, decryptionProgress } = useCrypto();
   const { confirmDialogProps, showConfirm } = useConfirmDialog();
   const analyticsDashboardRef = useRef<AnalyticsDashboardRef>(null);
 
   const [downloadingSecretId, setDownloadingSecretId] = useState<string | null>(null);
+  const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
   const [showProgressDialog, setShowProgressDialog] = useState(false);
   const [decryptedFiles, setDecryptedFiles] = useState<DecryptedFile[] | null>(null);
   const [showFilesDialog, setShowFilesDialog] = useState(false);
@@ -121,10 +123,35 @@ export const ReceiveSecrets: React.FC = () => {
       isDestructive: true,
       onConfirm: async () => {
         try {
-          await deleteSecret(secretId);
+          // Call API to delete the secret
+          await apiDeleteSecret(secretId);
+
+          // Delete matching local key if it exists
+          const currentKey = window.localStorage.getItem(`${user?.email}_currentKey`);
+          if (currentKey) {
+            const parsedKey = JSON.parse(currentKey);
+            if (parsedKey.thumbprint === secretId) {
+              deleteStoredKey(user?.email || '');
+            }
+          }
+
+          // Trigger exit animation
+          setDeletingIds((prev) => new Set(prev).add(secretId));
+
+          // Wait for animation to complete
+          await new Promise((resolve) => setTimeout(resolve, 380));
+
+          // Remove from state
+          removeFromState(secretId);
         } catch (err) {
           console.error('Delete failed:', err);
           setError(err instanceof Error ? err.message : 'Failed to delete secret');
+          // Remove from deleting set if error occurs
+          setDeletingIds((prev) => {
+            const next = new Set(prev);
+            next.delete(secretId);
+            return next;
+          });
         }
       },
     });
@@ -155,7 +182,7 @@ export const ReceiveSecrets: React.FC = () => {
     >
       <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', p: { xs: 2, sm: 3, md: 4 } }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography color="#8412c0" variant="h4" fontWeight={600}>
+          <Typography color="primary.main" variant="h4" fontWeight={600}>
             My Vault
           </Typography>
           <Button
@@ -192,6 +219,7 @@ export const ReceiveSecrets: React.FC = () => {
             onDownload={handleDownload}
             onDelete={handleDelete}
             downloadingSecretId={downloadingSecretId}
+            deletingIds={deletingIds}
           />
         )}
 

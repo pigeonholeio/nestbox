@@ -4,7 +4,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import SendIcon from '@mui/icons-material/Send';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import { ThemeToggle } from './ThemeToggle';
 import { LogoutButton } from '@/components/Auth/LogoutButton';
 import { useAuthStore } from '@/stores/authStore';
 
@@ -32,12 +31,15 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <AppBar
-      position="relative"
-      elevation={1}
+      position="fixed"
+      elevation={0}
       sx={{
-        bgcolor: 'background.paper',
+        bgcolor: 'rgba(11, 14, 20, 0.9)',
+        backdropFilter: 'blur(14px)',
+        borderBottom: '1px solid rgba(167, 139, 250, 0.1)',
         color: 'text.primary',
         width: '100%',
+        zIndex: 1100,
       }}
     >
       <Toolbar sx={{ gap: 2, justifyContent: 'space-between' }}>
@@ -158,7 +160,7 @@ export const Header: React.FC<HeaderProps> = ({
             </>
           )}
 
-          <ThemeToggle />
+          {/* <ThemeToggle /> */}
 
           {auth0User && (
             <>

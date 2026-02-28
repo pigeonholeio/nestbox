@@ -41,7 +41,16 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
   const shouldShowMenuButton = isMobile && showSidebar;
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw', overflow: 'hidden' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100vh',
+        width: '100vw',
+        overflow: 'hidden',
+        pt: showHeader ? '64px' : 0,
+      }}
+    >
       {/* Header */}
       {showHeader && (
         <Header

@@ -16,6 +16,7 @@ interface KeysListProps {
   onDelete: (keyId: string) => void;
   isDeletingKeyId?: string | null;
   isLoading?: boolean;
+  deletingIds: Set<string>;
 }
 
 /**
@@ -26,6 +27,7 @@ export const KeysList: React.FC<KeysListProps> = ({
   onDelete,
   isDeletingKeyId,
   isLoading = false,
+  deletingIds,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterTab, setFilterTab] = useState<'all' | 'ephemeral' | 'permanent'>('all');
@@ -124,12 +126,22 @@ export const KeysList: React.FC<KeysListProps> = ({
           }}
         >
           {filteredKeys.map((key) => (
-            <KeyCard
+            <Box
               key={key.id}
-              userKey={key}
-              onDelete={onDelete}
-              isDeleting={isDeletingKeyId === key.id}
-            />
+              sx={{
+                transition: 'opacity 350ms ease-in, transform 350ms ease-in, max-height 380ms ease-in',
+                opacity: deletingIds.has(key.id) ? 0 : 1,
+                transform: deletingIds.has(key.id) ? 'scale(0.97)' : 'scale(1)',
+                maxHeight: deletingIds.has(key.id) ? 0 : '600px',
+                overflow: 'hidden',
+              }}
+            >
+              <KeyCard
+                userKey={key}
+                onDelete={onDelete}
+                isDeleting={isDeletingKeyId === key.id}
+              />
+            </Box>
           ))}
         </Box>
       )}

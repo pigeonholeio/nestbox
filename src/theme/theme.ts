@@ -1,199 +1,288 @@
 import { createTheme, Theme } from '@mui/material/styles';
 
-// Light theme
-export const lightTheme: Theme = createTheme({
+// Plane Sailing Design System - Dark Theme with Violet Accent
+export const darkTheme: Theme = createTheme({
   palette: {
-    mode: 'light',
+    mode: 'dark',
     primary: {
-      main: '#8412c0',      // PigeonHole Purple
-      light: '#9d3dd4',     // Lighter purple
-      dark: '#6a0d9f',      // Darker purple
-      50: '#f5e6ff',
-      100: '#e6ccff',
-      200: '#cc99ff',
-      300: '#b366ff',
-      400: '#9d3dd4',
-      500: '#8412c0',
-      600: '#7a0fb8',
-      700: '#6a0d9f',
-      800: '#5a0a86',
-      900: '#3d056d',
+      main: '#a78bfa',      // Violet - PigeonHole accent per Plane Sailing spec
+      light: '#c4b5fd',     // Lighter violet
+      dark: '#8b5cf6',      // Darker violet
+      50: '#faf5ff',
+      100: '#f3e8ff',
+      200: '#e9d5ff',
+      300: '#d8b4fe',
+      400: '#c084fc',
+      500: '#a855f7',
+      600: '#9333ea',
+      700: '#7e22ce',
+      800: '#6b21a8',
+      900: '#581c87',
     } as Record<string, string>,
     secondary: {
-      main: '#9d3dd4',      // Lighter purple
-      light: '#b366ff',     // Even lighter
-      dark: '#6a0d9f',      // Darker purple
-      A100: '#b366ff',
-      A200: '#9d3dd4',
-      A400: '#6a0d9f',
-      A700: '#5a0a86',
-    } as Record<string, string>,
+      main: '#10b981',      // Green for secondary actions
+      light: '#34d399',
+      dark: '#059669',
+    },
     background: {
-      default: '#FFFFFF',
-      paper: '#F5F5F5',
+      default: '#07090d',   // Near-black background
+      paper: '#0b0e14',     // Slightly lighter for cards/surfaces
     },
     text: {
-      primary: '#212121',
-      secondary: '#757575',
-      disabled: '#9E9E9E',
+      primary: '#dde6f0',   // Light text
+      secondary: '#6b7f96', // Muted text
+      disabled: '#475569',  // Disabled text
     },
-    divider: '#BDBDBD',
+    divider: 'rgba(167, 139, 250, 0.1)',
     error: {
-      main: '#F44336',
+      main: '#ef4444',
+      light: '#fca5a5',
+      dark: '#dc2626',
     },
     success: {
-      main: '#4CAF50',
+      main: '#10b981',
+      light: '#6ee7b7',
+      dark: '#059669',
     },
     warning: {
-      main: '#FF9800',
+      main: '#f59e0b',
+      light: '#fcd34d',
+      dark: '#d97706',
+    },
+    info: {
+      main: '#06b6d4',
+      light: '#22d3ee',
+      dark: '#0891b2',
     },
   },
   typography: {
     fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
     h1: {
-      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      fontFamily: 'Syne, sans-serif',
       fontWeight: 700,
+      letterSpacing: '-0.02em',
     },
     h2: {
-      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      fontFamily: 'Syne, sans-serif',
       fontWeight: 700,
+      letterSpacing: '-0.01em',
     },
     h3: {
-      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      fontFamily: 'Syne, sans-serif',
       fontWeight: 700,
     },
     h4: {
-      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      fontFamily: 'Syne, sans-serif',
       fontWeight: 600,
     },
     h5: {
-      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      fontFamily: 'Syne, sans-serif',
       fontWeight: 600,
     },
     h6: {
-      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      fontFamily: 'JetBrains Mono, monospace',
       fontWeight: 600,
+      fontSize: '0.875rem',
+      textTransform: 'uppercase',
+      letterSpacing: '0.1em',
     },
     body1: {
       fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      fontSize: '1rem',
+      lineHeight: 1.6,
     },
     body2: {
       fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      fontSize: '0.875rem',
+      lineHeight: 1.6,
     },
     button: {
-      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      fontFamily: 'Syne, sans-serif',
+      fontWeight: 600,
+      textTransform: 'uppercase',
+      letterSpacing: '0.05em',
+    },
+    caption: {
+      fontFamily: 'JetBrains Mono, monospace',
+      fontSize: '0.68rem',
+      textTransform: 'uppercase',
+      letterSpacing: '0.1em',
     },
   },
   shape: {
-    borderRadius: 8,
+    borderRadius: 10,
   },
   components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          backgroundColor: '#07090d',
+          color: '#dde6f0',
+        },
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: {
-          textTransform: 'none',
-          fontWeight: 500,
+          textTransform: 'uppercase',
+          fontWeight: 600,
+          letterSpacing: '0.05em',
+          transition: 'all 0.2s ease',
+          borderRadius: '10px',
         },
+        contained: {
+          backgroundColor: '#a78bfa',
+          color: '#07090d',
+          '&:hover': {
+            backgroundColor: '#c4b5fd',
+            boxShadow: '0 0 20px rgba(167, 139, 250, 0.3)',
+          },
+        },
+        outlined: {
+          borderColor: 'rgba(167, 139, 250, 0.3)',
+          color: '#a78bfa',
+          '&:hover': {
+            borderColor: '#a78bfa',
+            backgroundColor: 'rgba(167, 139, 250, 0.08)',
+          },
+        },
+        text: {
+          color: '#a78bfa',
+          '&:hover': {
+            backgroundColor: 'rgba(167, 139, 250, 0.08)',
+          },
+        },
+      },
+      defaultProps: {
+        disableRipple: true,
       },
     },
     MuiCard: {
       styleOverrides: {
         root: {
-          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+          backgroundColor: '#0b0e14',
+          borderRadius: '10px',
+          border: '1px solid rgba(167, 139, 250, 0.1)',
+          boxShadow: 'none',
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#0b0e14',
+          backgroundImage: 'none',
+          borderColor: 'rgba(167, 139, 250, 0.1)',
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiOutlinedInput-root': {
+            backgroundColor: 'rgba(255, 255, 255, 0.04)',
+            '& fieldset': {
+              borderColor: 'rgba(167, 139, 250, 0.2)',
+            },
+            '&:hover fieldset': {
+              borderColor: 'rgba(167, 139, 250, 0.3)',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#a78bfa',
+              boxShadow: '0 0 0 3px rgba(167, 139, 250, 0.1)',
+            },
+          },
+          '& .MuiOutlinedInput-input': {
+            color: '#dde6f0',
+            '&::placeholder': {
+              color: '#6b7f96',
+              opacity: 1,
+            },
+          },
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          color: '#dde6f0',
+        },
+      },
+    },
+    MuiDivider: {
+      styleOverrides: {
+        root: {
+          borderColor: 'rgba(167, 139, 250, 0.1)',
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'rgba(167, 139, 250, 0.1)',
+          color: '#a78bfa',
+          borderColor: 'rgba(167, 139, 250, 0.2)',
+        },
+      },
+    },
+    MuiAlert: {
+      styleOverrides: {
+        root: {
+          borderRadius: '10px',
+          border: '1px solid',
+        },
+        standardError: {
+          backgroundColor: 'rgba(239, 68, 68, 0.1)',
+          borderColor: 'rgba(239, 68, 68, 0.3)',
+          color: '#fca5a5',
+        },
+        standardWarning: {
+          backgroundColor: 'rgba(245, 158, 11, 0.1)',
+          borderColor: 'rgba(245, 158, 11, 0.3)',
+          color: '#fcd34d',
+        },
+        standardInfo: {
+          backgroundColor: 'rgba(6, 182, 212, 0.1)',
+          borderColor: 'rgba(6, 182, 212, 0.3)',
+          color: '#22d3ee',
+        },
+        standardSuccess: {
+          backgroundColor: 'rgba(16, 185, 129, 0.1)',
+          borderColor: 'rgba(16, 185, 129, 0.3)',
+          color: '#6ee7b7',
+        },
+      },
+    },
+    MuiMenu: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: '#0b0e14',
+          borderColor: 'rgba(167, 139, 250, 0.1)',
+          border: '1px solid rgba(167, 139, 250, 0.1)',
+        },
+      },
+    },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: '#0b0e14',
+          borderColor: 'rgba(167, 139, 250, 0.1)',
+          border: '1px solid rgba(167, 139, 250, 0.1)',
+        },
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          color: '#a78bfa',
+          '&:hover': {
+            backgroundColor: 'rgba(167, 139, 250, 0.1)',
+          },
         },
       },
     },
   },
 });
 
-// Dark theme
-export const darkTheme: Theme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: '#b366ff',      // Brighter purple for dark mode
-      light: '#cc99ff',     // Even brighter for light variants
-      dark: '#8412c0',      // Original purple for dark variants
-    },
-    secondary: {
-      main: '#b366ff',
-      light: '#cc99ff',
-      dark: '#8412c0',
-    },
-    background: {
-      default: '#121212',
-      paper: '#1E1E1E',
-    },
-    text: {
-      primary: '#E0E0E0',
-      secondary: '#9E9E9E',
-      disabled: '#757575',
-    },
-    divider: '#424242',
-    error: {
-      main: '#EF5350',
-    },
-    success: {
-      main: '#66BB6A',
-    },
-    warning: {
-      main: '#FFA726',
-    },
-  },
-  typography: {
-    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-    h1: {
-      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-      fontWeight: 700,
-    },
-    h2: {
-      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-      fontWeight: 700,
-    },
-    h3: {
-      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-      fontWeight: 700,
-    },
-    h4: {
-      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-      fontWeight: 600,
-    },
-    h5: {
-      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-      fontWeight: 600,
-    },
-    h6: {
-      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-      fontWeight: 600,
-    },
-    body1: {
-      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-    },
-    body2: {
-      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-    },
-    button: {
-      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-    },
-  },
-  shape: {
-    borderRadius: 8,
-  },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          textTransform: 'none',
-          fontWeight: 500,
-        },
-      },
-    },
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
-        },
-      },
-    },
-  },
-});
+// Export darkTheme as default for backwards compatibility
+export const lightTheme = darkTheme;

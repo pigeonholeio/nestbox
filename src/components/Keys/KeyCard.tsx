@@ -123,8 +123,19 @@ export const KeyCard: React.FC<KeyCardProps> = ({
                 icon={<StorageIcon />}
                 label="Private Key Available"
                 size="small"
-                color="primary"
-                variant="filled"
+                variant="outlined"
+                sx={{
+                  color: '#a78bfa',
+                  backgroundColor: 'rgba(167, 139, 250, 0.12)',
+                  borderColor: '#a78bfa',
+                  border: '1px solid',
+                  fontWeight: 600,
+                  animation: 'softPulse 2.5s ease-in-out infinite',
+                  '&:hover': {
+                    backgroundColor: 'rgba(167, 139, 250, 0.18)',
+                    boxShadow: '0 0 16px rgba(167, 139, 250, 0.3)',
+                  },
+                }}
               />
             </Tooltip>
           ) : (

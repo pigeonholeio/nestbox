@@ -14,6 +14,7 @@ interface SecretsState {
   // Actions
   fetchReceivedSecrets: () => Promise<void>;
   deleteSecret: (secretId: string) => Promise<void>;
+  removeFromState: (secretId: string) => void;
   deleteAllSecrets: () => Promise<void>;
   clearSecrets: () => void;
   setError: (error: string | null) => void;
@@ -44,7 +45,7 @@ export const useSecretsStore = create<SecretsState>((set) => ({
     }
   },
 
-  // Delete a specific secret
+  // Delete a specific secret (API + state removal)
   deleteSecret: async (secretId) => {
     try {
       await apiDeleteSecret(secretId);
@@ -57,6 +58,13 @@ export const useSecretsStore = create<SecretsState>((set) => ({
       console.error('Failed to delete secret:', error);
       throw error;
     }
+  },
+
+  // Remove from state only (no API call) - used for animation cleanup
+  removeFromState: (secretId) => {
+    set((state) => ({
+      receivedSecrets: state.receivedSecrets.filter((s) => s.reference !== secretId),
+    }));
   },
 
   // Delete all secrets

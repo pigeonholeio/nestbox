@@ -45,6 +45,7 @@ export const MyKeys: React.FC = () => {
   const [keys, setKeys] = useState<UserKey[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeletingKeyId, setIsDeletingKeyId] = useState<string | null>(null);
+  const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
   const [error, setError] = useState<string | null>(null);
   const [showRegenerateWarning, setShowRegenerateWarning] = useState(false);
   const [isRegenerating, setIsRegenerating] = useState(false);
@@ -112,10 +113,23 @@ export const MyKeys: React.FC = () => {
             console.log('Deleted local key for user:', currentKey.email);
           }
 
-          setKeys(keys.filter((k) => k.id !== keyId));
+          // Trigger exit animation
+          setDeletingIds((prev) => new Set(prev).add(keyId));
+
+          // Wait for animation to complete
+          await new Promise((resolve) => setTimeout(resolve, 380));
+
+          // Remove from local state
+          setKeys((prev) => prev.filter((k) => k.id !== keyId));
         } catch (err) {
           console.error('Delete failed:', err);
           setError(err instanceof Error ? err.message : 'Failed to delete key');
+          // Remove from deleting set if error occurs
+          setDeletingIds((prev) => {
+            const next = new Set(prev);
+            next.delete(keyId);
+            return next;
+          });
         } finally {
           setIsDeletingKeyId(null);
         }
@@ -204,7 +218,7 @@ export const MyKeys: React.FC = () => {
     >
       <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', p: { xs: 2, sm: 3, md: 4 } }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography color="#8412c0" variant="h4" fontWeight={600}>
+          <Typography color="primary.main" variant="h4" fontWeight={600}>
             My Keys
           </Typography>
           <Box sx={{ display: 'flex', gap: 1 }}>
@@ -246,6 +260,7 @@ export const MyKeys: React.FC = () => {
           onDelete={handleDelete}
           isDeletingKeyId={isDeletingKeyId}
           isLoading={isLoading}
+          deletingIds={deletingIds}
         />
 
         {/* Confirm Dialog */}
