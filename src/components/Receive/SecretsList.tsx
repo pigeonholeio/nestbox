@@ -164,6 +164,7 @@ export const SecretsList: React.FC<SecretsListProps> = ({
                     transform: deletingIds.has(secret.reference) ? 'scale(0.97)' : 'scale(1)',
                     maxHeight: deletingIds.has(secret.reference) ? 0 : '600px',
                     overflow: 'hidden',
+                    paddingTop: '4px',
                   }}
                 >
                   <SecretCard

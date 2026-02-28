@@ -108,8 +108,10 @@ export const SecretCard: React.FC<SecretCardProps> = ({
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
+        transition: 'all 0.3s ease',
         '&:hover': {
-          boxShadow: 4,
+          boxShadow: 8,
+          transform: 'translateY(-4px)',
         },
       }}
     >

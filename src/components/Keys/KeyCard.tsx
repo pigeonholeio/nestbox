@@ -61,9 +61,10 @@ export const KeyCard: React.FC<KeyCardProps> = ({
         flexDirection: 'column',
         position: 'relative',
         opacity: isDeleting ? 0.6 : 1,
-        transition: 'opacity 0.2s',
+        transition: 'all 0.3s ease',
         '&:hover': {
-          boxShadow: 4,
+          boxShadow: 8,
+          transform: 'translateY(-4px)',
         },
       }}
     >

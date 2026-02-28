@@ -134,6 +134,7 @@ export const KeysList: React.FC<KeysListProps> = ({
                 transform: deletingIds.has(key.id) ? 'scale(0.97)' : 'scale(1)',
                 maxHeight: deletingIds.has(key.id) ? 0 : '600px',
                 overflow: 'hidden',
+                paddingTop: '4px',
               }}
             >
               <KeyCard
