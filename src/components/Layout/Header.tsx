@@ -4,7 +4,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import SendIcon from '@mui/icons-material/Send';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import { LogoutButton } from '@/components/Auth/LogoutButton';
+import { ProfileMenuButton } from '@/components/Auth/ProfileMenuButton';
 import { useAuthStore } from '@/stores/authStore';
 
 interface HeaderProps {
@@ -162,21 +162,7 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* <ThemeToggle /> */}
 
-          {auth0User && (
-            <>
-              <Typography
-                variant="body2"
-                sx={{
-                  display: { xs: 'none', lg: 'block' },
-                  color: 'text.secondary',
-              whiteSpace: 'nowrap',
-                }}
-              >
-                {auth0User.email}
-              </Typography>
-              <LogoutButton />
-            </>
-          )}
+          {auth0User && <ProfileMenuButton />}
         </Box>
       </Toolbar>
     </AppBar>

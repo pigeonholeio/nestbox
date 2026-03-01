@@ -29,13 +29,15 @@ export const apiClient: AxiosInstance = axios.create({
 });
 
 /**
- * Request interceptor to add auth token
+ * Request interceptor to add auth token and version header
  */
 apiClient.interceptors.request.use(
   (config) => {
     if (authToken) {
       config.headers.Authorization = `Bearer ${authToken}`;
     }
+    // Add version header from build-time git commit
+    config.headers['x-ver'] = __COMMIT_HASH__;
     return config;
   },
   (error) => {
