@@ -6,6 +6,7 @@ import { useUIStore } from '@/stores/uiStore';
 import { lightTheme, darkTheme } from '@/theme/theme';
 import { ErrorBoundary } from '@/components/Common/ErrorBoundary';
 import { ProtectedRoute } from '@/components/Auth/ProtectedRoute';
+import { OnboardingRoute } from '@/components/Auth/OnboardingRoute';
 import { AuthCallback } from '@/components/Auth/AuthCallback';
 import { Landing } from '@/pages/Landing';
 import { Onboarding } from '@/pages/Onboarding';
@@ -41,9 +42,9 @@ function App() {
               <Route
                 path="/onboarding"
                 element={
-                  <ProtectedRoute>
+                  <OnboardingRoute>
                     <Onboarding />
-                  </ProtectedRoute>
+                  </OnboardingRoute>
                 }
               />
               <Route

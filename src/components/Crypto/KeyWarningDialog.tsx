@@ -39,7 +39,13 @@ export const KeyWarningDialog: React.FC<KeyWarningDialogProps> = ({
     return (
       <Dialog
         open={open}
-        onClose={onCancel}
+        onClose={(_, reason) => {
+          // Only allow manual cancellation via button, not backdrop click
+          if (reason === 'backdropClick') {
+            return;
+          }
+          onCancel();
+        }}
         maxWidth="sm"
         fullWidth
         aria-labelledby="key-ready-title"
@@ -105,7 +111,13 @@ export const KeyWarningDialog: React.FC<KeyWarningDialogProps> = ({
   return (
     <Dialog
       open={open}
-      onClose={onCancel}
+      onClose={(_, reason) => {
+        // Only allow manual cancellation via button, not backdrop click
+        if (reason === 'backdropClick') {
+          return;
+        }
+        onCancel();
+      }}
       maxWidth="sm"
       fullWidth
       aria-labelledby="key-warning-title"

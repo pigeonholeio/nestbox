@@ -41,6 +41,12 @@ export const KeyGenerationModal: React.FC<KeyGenerationModalProps> = ({
   return (
     <Dialog
       open={open}
+      onClose={(_, reason) => {
+        // Prevent closing by backdrop click or escape key
+        if (reason === 'backdropClick' || reason === 'escapeKeyDown') {
+          return;
+        }
+      }}
       disableEscapeKeyDown
       maxWidth="sm"
       fullWidth
