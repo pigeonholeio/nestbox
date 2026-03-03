@@ -99,7 +99,7 @@ export const RecipientInput: React.FC<RecipientInputProps> = ({
           email: user.email,
           user_id: user.id,
           isTransient: useTransient,
-          keyFingerprint: user.keys[0]?.thumbprint,
+          keyFingerprint: user.keys[0]?.fingerprint,
         };
 
         onRecipientsChange([...recipients, newRecipient]);

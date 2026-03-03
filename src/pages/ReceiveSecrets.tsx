@@ -130,7 +130,7 @@ export const ReceiveSecrets: React.FC = () => {
           const currentKey = window.localStorage.getItem(`${user?.email}_currentKey`);
           if (currentKey) {
             const parsedKey = JSON.parse(currentKey);
-            if (parsedKey.thumbprint === secretId) {
+            if (parsedKey.fingerprint === secretId) {
               deleteStoredKey(user?.email || '');
             }
           }

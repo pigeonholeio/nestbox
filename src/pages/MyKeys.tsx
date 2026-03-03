@@ -100,7 +100,7 @@ export const MyKeys: React.FC = () => {
         try {
           setIsDeletingKeyId(keyId);
 
-          // Get the key being deleted to check its thumbprint
+          // Get the key being deleted to check its fingerprint
           const keyToDelete = keys.find((k) => k.id === keyId);
 
           if (userId) {
@@ -108,7 +108,7 @@ export const MyKeys: React.FC = () => {
           }
 
           // If the deleted key matches the current local key, delete it from browser storage
-          if (keyToDelete && currentKey && keyToDelete.thumbprint === currentKey.thumbprint) {
+          if (keyToDelete && currentKey && keyToDelete.fingerprint === currentKey.fingerprint) {
             deleteStoredKey(currentKey.email);
             console.log('Deleted local key for user:', currentKey.email);
           }
@@ -154,27 +154,27 @@ export const MyKeys: React.FC = () => {
     setIsRegenerating(true);
 
     try {
-      // Store the OLD key's thumbprint BEFORE regeneration
+      // Store the OLD key's fingerprint BEFORE regeneration
       // (after generateKey(), currentKey will be updated to the NEW key)
-      const oldKeyThumbprint = currentKey?.thumbprint;
+      const oldKeyFingerprint = currentKey?.fingerprint;
 
       // Generate new key (this updates currentKey in the store to the NEW key)
       await generateKey();
 
       // After generating new key, delete any old keys from remote
-      if (userId && oldKeyThumbprint) {
+      if (userId && oldKeyFingerprint) {
         // Reload to get the updated list (should now include the new key)
         const response = await getCurrentUserKeys();
         if (response && response.keys) {
           const updatedKeys = response.keys;
 
-          // Find and delete any keys with the old thumbprint
-          const oldKeysToDelete = updatedKeys.filter(k => k.thumbprint === oldKeyThumbprint);
+          // Find and delete any keys with the old fingerprint
+          const oldKeysToDelete = updatedKeys.filter(k => k.fingerprint === oldKeyFingerprint);
 
           for (const oldKey of oldKeysToDelete) {
             try {
               await deletePublicKeyForUser(userId, oldKey.id);
-              console.log('Deleted old key:', oldKey.id, 'with thumbprint:', oldKeyThumbprint);
+              console.log('Deleted old key:', oldKey.id, 'with fingerprint:', oldKeyFingerprint);
             } catch (err) {
               console.error('Failed to delete old key:', oldKey.id, err);
             }

@@ -55,14 +55,14 @@ export async function getCurrentUserKeys(): Promise<ValidateKeyResponse> {
  */
 export async function uploadPublicKey(
   keyData: string,
-  thumbprint: string
+  fingerprint: string
 ): Promise<UploadKeyResponse> {
   // Base64 encode the armored public key
   const base64KeyData = btoa(keyData);
 
   const request: UploadKeyRequest = {
     key_data: base64KeyData,
-    thumbprint: thumbprint,
+    fingerprint: fingerprint,
     reference: generateRandomPet(),
     only: true,
     force: false,
@@ -74,24 +74,24 @@ export async function uploadPublicKey(
 }
 
 /**
- * Validate key by thumbprint for current user
+ * Validate key by fingerprint for current user
  */
-export async function validateKey(thumbprint: string): Promise<ValidateKeyResponse> {
+export async function validateKey(fingerprint: string): Promise<ValidateKeyResponse> {
   const response = await apiClient.get<ValidateKeyResponse>(
-    `/user/me/key/validate/${thumbprint}`
+    `/user/me/key/validate/${fingerprint}`
   );
   return response.data;
 }
 
 /**
- * Validate key by thumbprint for a specific user
+ * Validate key by fingerprint for a specific user
  */
 export async function validateKeyForUser(
   userId: string,
-  thumbprint: string
+  fingerprint: string
 ): Promise<ValidateKeyResponse> {
   const response = await apiClient.get<ValidateKeyResponse>(
-    `/user/${userId}/key/validate/${thumbprint}`
+    `/user/${userId}/key/validate/${fingerprint}`
   );
   return response.data;
 }
@@ -118,7 +118,7 @@ export async function getUserKeysByUserId(userId: string): Promise<ValidateKeyRe
 export async function uploadPublicKeyForUser(
   userId: string,
   keyData: string,
-  thumbprint: string,
+  fingerprint: string,
   reference: string
 ): Promise<UploadKeyResponse> {
   // Base64 encode the armored public key
@@ -126,7 +126,7 @@ export async function uploadPublicKeyForUser(
 
   const request: UploadKeyRequest = {
     key_data: base64KeyData,
-    thumbprint: thumbprint,
+    fingerprint: fingerprint,
     reference: reference,
     transient: false,
   };

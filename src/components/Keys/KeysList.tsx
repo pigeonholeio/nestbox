@@ -48,7 +48,7 @@ export const KeysList: React.FC<KeysListProps> = ({
       result = result.filter(
         (k) =>
           k.reference?.toLowerCase().includes(query) ||
-          k.thumbprint.toLowerCase().includes(query)
+          k.fingerprint.toLowerCase().includes(query)
       );
     }
 
@@ -99,7 +99,7 @@ export const KeysList: React.FC<KeysListProps> = ({
 
       <TextField
         fullWidth
-        placeholder="Search by reference or thumbprint..."
+        placeholder="Search by reference or fingerprint..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         variant="outlined"

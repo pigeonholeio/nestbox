@@ -10,7 +10,6 @@ import {
   Tooltip,
   Button,
 } from '@mui/material';
-import LockIcon from '@mui/icons-material/Lock';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import FlashOnIcon from '@mui/icons-material/FlashOn';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -153,7 +152,7 @@ export const SecretCard: React.FC<SecretCardProps> = ({
         {/* )} */}
 
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2 }}>
-          {secret.downloaded ? (
+          {/* {secret.downloaded ? (
             <Chip
               icon={<CheckCircleIcon />}
               label="Downloaded"
@@ -162,14 +161,14 @@ export const SecretCard: React.FC<SecretCardProps> = ({
               variant="outlined"
             />
           ) : (
-            <Chip
-              icon={<LockIcon />}
-              label="Not downloaded"
-              size="small"
-              color="primary"
-              variant="outlined"
-            />
-          )}
+            // <Chip
+            //   icon={<LockIcon />}
+            //   label="Not downloaded"
+            //   size="small"
+            //   color="primary"
+            //   variant="outlined"
+            // />
+          )} */}
 
           {secret.onetime && (
             <Tooltip title="This secret will be deleted after first download" arrow>

@@ -55,7 +55,7 @@ export interface ServerInfoResponse {
 export interface UserKey {
   id: string;
   key_data: string;
-  thumbprint: string;
+  fingerprint: string;
   reference: string;
   created_at: string;
 }
@@ -82,7 +82,7 @@ export interface UserMeResponse extends GeneralMessage {
 
 export interface UploadKeyRequest {
   key_data: string;
-  thumbprint: string;
+  fingerprint: string;
   reference: string;
   only?: boolean;
   force?: boolean;
@@ -134,7 +134,6 @@ export interface Secret {
   size: number;
   onetime: boolean;
   downloaded?: boolean;
-  recipient_key_thumbprint?: string;
   recipient_key_fingerprint?: string;
 }
 

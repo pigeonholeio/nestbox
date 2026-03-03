@@ -59,7 +59,7 @@ export const useKeyStore = create<KeyState>((set) => ({
 
       // Upload public key to server FIRST (before storing private key locally)
       set({ generationProgress: 60 });
-      await uploadPublicKey(keyData.publicKey, keyData.thumbprint);
+      await uploadPublicKey(keyData.publicKey, keyData.fingerprint);
 
       // Only after successful upload, store private key in localStorage
       set({ generationProgress: 80 });

@@ -33,15 +33,15 @@ export const KeyCard: React.FC<KeyCardProps> = ({
   const { currentKey } = useKeyStore();
 
   const isEphemeral = userKey.reference?.includes('ephemeral');
-  const thumbprintShort = userKey.thumbprint.substring(0, 16) + '...';
+  const fingerprintShort = userKey.fingerprint.substring(0, 16) + '...';
 
   // Check if the private key for this public key exists in the browser
   const hasPrivateKey = useMemo(() => {
-    return currentKey?.thumbprint === userKey.thumbprint;
-  }, [currentKey?.thumbprint, userKey.thumbprint]);
+    return currentKey?.fingerprint === userKey.fingerprint;
+  }, [currentKey?.fingerprint, userKey.fingerprint]);
 
-  const handleCopyThumbprint = () => {
-    navigator.clipboard.writeText(userKey.thumbprint);
+  const handleCopyFingerprint = () => {
+    navigator.clipboard.writeText(userKey.fingerprint);
   };
 
   const formatDate = (dateString: string): string => {
@@ -86,10 +86,10 @@ export const KeyCard: React.FC<KeyCardProps> = ({
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
           <LockIcon fontSize="small" color="action" />
           <Typography variant="caption" color="text.secondary" noWrap sx={{ flex: 1 }}>
-            {thumbprintShort}
+            {fingerprintShort}
           </Typography>
-          <Tooltip title="Copy full thumbprint">
-            <IconButton size="small" onClick={handleCopyThumbprint}>
+          <Tooltip title="Copy full fingerprint">
+            <IconButton size="small" onClick={handleCopyFingerprint}>
               <ContentCopyIcon fontSize="small" />
             </IconButton>
           </Tooltip>

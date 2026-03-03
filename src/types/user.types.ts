@@ -14,7 +14,7 @@ export interface PigeonHoleUser {
   shortcode: string;
   keys: Array<{
     id: string;
-    thumbprint: string;
+    fingerprint: string;
     reference: string;
     created_at: string;
   }>;

@@ -54,11 +54,11 @@ export function useKeyManagement() {
       // Get remote keys from API
       const remoteKeysResponse = await getCurrentUserKeys();
       const remoteKeys = remoteKeysResponse.keys || [];
-      const localThumbprint = currentKey?.thumbprint;
+      const localFingerprint = currentKey?.fingerprint;
 
       // Check if local key matches any remote key
-      const hasMatchingRemoteKey = localThumbprint && remoteKeys.some(
-        (k) => k.thumbprint === localThumbprint
+      const hasMatchingRemoteKey = localFingerprint && remoteKeys.some(
+        (k) => k.fingerprint === localFingerprint
       );
 
       // If no matching key found or no remote keys exist, generate and upload new key
