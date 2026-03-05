@@ -85,9 +85,14 @@ export const KeyCard: React.FC<KeyCardProps> = ({
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
           <LockIcon fontSize="small" color="action" />
-          <Typography variant="caption" color="text.secondary" noWrap sx={{ flex: 1 }}>
-            {fingerprintShort}
-          </Typography>
+          <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
+            <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem', mb: 0.25 }}>
+              Fingerprint
+            </Typography>
+            <Typography variant="caption" color="text.secondary" noWrap sx={{ fontFamily: 'monospace', fontSize: '0.75rem' }}>
+              {fingerprintShort}
+            </Typography>
+          </Box>
           <Tooltip title="Copy full fingerprint">
             <IconButton size="small" onClick={handleCopyFingerprint}>
               <ContentCopyIcon fontSize="small" />

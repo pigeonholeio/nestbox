@@ -38,7 +38,7 @@ export const SecretsList: React.FC<SecretsListProps> = ({
   deletingIds,
 }) => {
   const { currentKey } = useKeyStore();
-  const [filter, setFilter] = React.useState<FilterType>('decryptable');
+  const [filter, setFilter] = React.useState<FilterType>('all');
   const [searchQuery, setSearchQuery] = React.useState('');
   const [now, setNow] = React.useState(() => Date.now());
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogTitle, Box, Divider, Alert, Snackbar } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle, Box, Divider, Alert, Snackbar, Button, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { FileDropzone } from './FileDropzone';
 import { RecipientInput } from './RecipientInput';
 import { SecretOptionsPanel } from './SecretOptionsPanel';
@@ -161,11 +162,7 @@ export const SendSecretModal: React.FC<SendSecretModalProps> = ({
       setUploadProgress({ stage: 'Complete!', percent: 100 });
       setIsComplete(true);
       setShowSuccess(true);
-
-      // Close modal and reset form after brief delay
-      setTimeout(() => {
-        onClose();
-      }, 3000);
+      setShowProgress(false);
     } catch (err) {
       console.error('Send failed:', err);
       setError(err instanceof Error ? err.message : 'Failed to send secret');
@@ -221,6 +218,24 @@ export const SendSecretModal: React.FC<SendSecretModalProps> = ({
             uploadProgress={uploadProgress}
             isComplete={isComplete}
           />
+        ) : isComplete ? (
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center', py: 4 }}>
+            <CheckCircleIcon sx={{ fontSize: 80, color: 'success.main' }} />
+            <Typography variant="h6" sx={{ textAlign: 'center' }}>
+              Secret Sent Successfully!
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center' }}>
+              Your recipients have been notified and can now download the secret.
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={onClose}
+              sx={{ mt: 2 }}
+            >
+              Close
+            </Button>
+          </Box>
         ) : (
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             <FileDropzone

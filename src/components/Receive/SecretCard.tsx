@@ -17,6 +17,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import WarningIcon from '@mui/icons-material/Warning';
 import PersonIcon from '@mui/icons-material/Person';
 import BlockIcon from '@mui/icons-material/Block';
+import LockIcon from '@mui/icons-material/Lock';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import type { Secret } from '@/types/api.types';
 import { useKeyStore } from '@/stores/keyStore';
 
@@ -151,6 +153,25 @@ export const SecretCard: React.FC<SecretCardProps> = ({
           </Typography>
         {/* )} */}
 
+        {secret.recipient_key_fingerprint && (
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+            <LockIcon fontSize="small" color="action" />
+            <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
+              <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem', mb: 0.25 }}>
+                Encrypted with Fingerprint
+              </Typography>
+              <Typography variant="caption" color="text.secondary" noWrap sx={{ fontFamily: 'monospace', fontSize: '0.75rem' }}>
+                {secret.recipient_key_fingerprint.substring(0, 16)}...
+              </Typography>
+            </Box>
+            <Tooltip title="Copy fingerprint">
+              <IconButton size="small" onClick={() => navigator.clipboard.writeText(secret.recipient_key_fingerprint!)}>
+                <ContentCopyIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        )}
+
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2 }}>
           {/* {secret.downloaded ? (
             <Chip
@@ -209,7 +230,7 @@ export const SecretCard: React.FC<SecretCardProps> = ({
       <CardActions sx={{ justifyContent: 'center', pb: 2 }}>
         <Box sx={{ width: '100%', px: { xs: 1, sm: 2 } }}>
           {!canDecrypt && secret.recipient_key_fingerprint ? (
-            <Tooltip title={`This secret doesn't match your local key. Expected fingerprint: ${secret.recipient_key_fingerprint}. Your key fingerprint: ${currentKey?.fingerprint || 'N/A'}`}>
+            <Tooltip title={`This secret doesn't match your local key. You may have used another device or have used the cli tool. Expected fingerprint: ${secret.recipient_key_fingerprint}. Your key fingerprint: ${currentKey?.fingerprint || 'N/A'}`}>
               <span style={{ width: '100%', display: 'block' }}>
                 <Button
                   fullWidth
